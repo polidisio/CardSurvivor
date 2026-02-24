@@ -1,6 +1,10 @@
 import { Command } from 'commander';
+import { homedir } from 'os';
+import * as path from 'path';
+import * as fs from 'fs/promises';
 import { configStore } from '../config/store.js';
-import { Gateway } from './gateway/server.js';
+import { Gateway } from '../gateway/server.js';
+import { MemoryManager } from '../agent/memory/index.js';
 
 const program = new Command();
 
@@ -126,6 +130,84 @@ program
 
     console.log('\n¡Configuración completada!');
     console.log('Ejecuta: openkairo start');
+  });
+
+program
+  .command('personality')
+  .description('Gestiona la personalidad del agente')
+  .addCommand(
+    new Command('show')
+      .description('Muestra la personalidad actual')
+      .action(async () => {
+        const mm = new MemoryManager();
+        const personality = await mm.getPersonality();
+        console.log(personality);
+      })
+  )
+  .addCommand(
+    new Command('edit')
+      .description('Abre el archivo de personalidad en el editor')
+      .action(async () => {
+        const workspace = path.join(homedir(), '.openkairo', 'workspace', 'AGENTS.md');
+        console.log(`Edita el archivo: ${workspace}`);
+        console.log('Luego reinicia el Gateway para aplicar cambios.');
+      })
+  );
+
+program
+  .command('memory')
+  .description('Gestiona la memoria del agente')
+  .addCommand(
+    new Command('show')
+      .description('Muestra la memoria actual')
+      .action(async () => {
+        const mm = new MemoryManager();
+        const [memory, context] = await Promise.all([
+          mm.getMemory(),
+          mm.getContext(),
+        ]);
+        console.log('## Memoria');
+        console.log(memory);
+        console.log('\n## Contexto');
+        console.log(context);
+      })
+  )
+  .addCommand(
+    new Command('facts')
+      .description('Muestra los hechos aprendidos')
+      .action(async () => {
+        const mm = new MemoryManager();
+        console.log('Hechos aprendidos:');
+        for (const [key, value] of mm.getFacts()) {
+          console.log(`  - ${key}: ${value}`);
+        }
+        console.log('\nPreferencias:');
+        for (const [key, value] of mm.getPreferences()) {
+          console.log(`  - ${key}: ${value}`);
+        }
+      })
+  )
+  .addCommand(
+    new Command('clear')
+      .description('Limpia toda la memoria')
+      .action(async () => {
+        const mm = new MemoryManager();
+        await mm.learnFact('nombre', '');
+        console.log('Memoria limpiada.');
+      })
+  );
+
+program
+  .command('workspace')
+  .description('Muestra la ubicación del workspace')
+  .action(() => {
+    const workspace = path.join(homedir(), '.openkairo', 'workspace');
+    console.log(`Workspace: ${workspace}`);
+    console.log('\nArchivos:');
+    console.log('  - AGENTS.md   : Personalidad del agente');
+    console.log('  - MEMORY.md   : Hechos y preferencias');
+    console.log('  - CONTEXT.md  : Contexto adicional');
+    console.log('  - sessions/   : Historial de conversaciones');
   });
 
 function question(prompt: string): Promise<string> {

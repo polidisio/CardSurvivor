@@ -6,9 +6,21 @@ Asistente de IA autoalojado tipo OpenClaw con soporte multi-provider y gestión 
 
 - **Multi-provider**: Anthropic, OpenAI, Google Gemini, Ollama (local)
 - **Gestión avanzada de tokens**: Cache, compresión de contexto, alertas de presupuesto
+- **Persistencia**: Personalidad, memoria y conversaciones (30 días)
 - **Canales**: Telegram, Discord
 - **Tools**: Shell, archivos, HTTP fetch
 - **Arquitectura**: Gateway WebSocket con sesiones persistentes
+
+## Estructura del Workspace
+
+```
+~/.openkairo/workspace/
+├── AGENTS.md      # Personalidad del agente (system prompt)
+├── MEMORY.md     # Hechos aprendidos y preferencias
+├── CONTEXT.md    # Contexto adicional persistente
+└── sessions/     # Historial de conversaciones (30 días)
+    └── 2026-02-24-telegram-123456.json
+```
 
 ## Instalación
 
@@ -32,8 +44,21 @@ openkairo config set providers.anthropic.apiKey "sk-ant-..."
 # Iniciar el Gateway
 npm run dev -- start
 
+# Ver workspace
+openkairo workspace
+
+# Editar personalidad
+openkairo personality edit
+
+# Ver memoria
+openkairo memory show
+openkairo memory facts
+
 # Ver stats
 curl http://localhost:18789/stats
+
+# Ver memoria via API
+curl http://localhost:18789/memory
 ```
 
 ## Configuración Manual

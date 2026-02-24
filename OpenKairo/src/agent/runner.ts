@@ -1,27 +1,44 @@
 import type { Message, Tool, ToolResult, ChatOptions, LLMProvider } from '../types.js';
 import { TokenManager } from './token-manager.js';
+import { MemoryManager } from './memory/index.js';
 
 export interface AgentConfig {
   name: string;
   model: string;
   provider: LLMProvider;
-  systemPrompt?: string;
   tools?: Tool[];
 }
 
 export class AgentRunner {
   private config: AgentConfig;
   private tokenManager: TokenManager;
+  private memoryManager: MemoryManager;
   private maxIterations = 10;
+  private systemPrompt: string = '';
 
-  constructor(config: AgentConfig, tokenManager: TokenManager) {
+  constructor(config: AgentConfig, tokenManager: TokenManager, memoryManager: MemoryManager) {
     this.config = config;
     this.tokenManager = tokenManager;
+    this.memoryManager = memoryManager;
+  }
+
+  async initialize(): Promise<void> {
+    const [personality, context, memory] = await Promise.all([
+      this.memoryManager.getPersonality(),
+      this.memoryManager.getContext(),
+      this.memoryManager.getMemory(),
+    ]);
+
+    const contextSection = context ? `\n\n## Contexto\n${context}` : '';
+    const memorySection = memory ? `\n\n## Memoria del usuario\n${memory}` : '';
+
+    this.systemPrompt = `${personality}${contextSection}${memorySection}`;
+    console.log('Agent initialized with personality from workspace');
   }
 
   async *run(messages: Message[]): AsyncGenerator<string, void, unknown> {
-    const systemMessages: Message[] = this.config.systemPrompt
-      ? [{ id: 'system', role: 'system', content: this.config.systemPrompt, timestamp: Date.now() }]
+    const systemMessages: Message[] = this.systemPrompt
+      ? [{ id: 'system', role: 'system', content: this.systemPrompt, timestamp: Date.now() }]
       : [];
 
     let contextMessages = [...systemMessages, ...messages];
@@ -91,7 +108,36 @@ export class AgentRunner {
     }
   }
 
+  async learnFromConversation(userMessage: string, assistantMessage: string): Promise<void> {
+    const patterns = [
+      /me llamo (\w+)/i,
+      /mi nombre es (\w+)/i,
+      /prefiero (.*)/i,
+      /me gusta (.*)/i,
+      /no me gusta (.*)/i,
+      /soy (\w+)/i,
+    ];
+
+    for (const pattern of patterns) {
+      const match = userMessage.match(pattern);
+      if (match) {
+        const key = pattern.source.replace(/[\\^$*+?.()|[\]{}]/g, '').replace(/.*me llamo.*|.*mi nombre es.*|.*prefiero.*|.*me gusta.*|.*no me gusta.*|.*soy.*/i, 
+          match[0].includes('llamo') ? 'nombre' : 
+          match[0].includes('nombre') ? 'nombre' :
+          match[0].prefiere ? 'prefiere' :
+          match[0].includes('gusta') ? 'gusta' : 'gusta');
+        
+        await this.memoryManager.learnFact(key, match[1]);
+        console.log(`Learned fact: ${key} = ${match[1]}`);
+      }
+    }
+  }
+
   updateConfig(config: Partial<AgentConfig>): void {
     this.config = { ...this.config, ...config };
+  }
+
+  getMemoryManager(): MemoryManager {
+    return this.memoryManager;
   }
 }

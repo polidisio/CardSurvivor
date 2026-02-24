@@ -1,11 +1,15 @@
 import Fastify from 'fastify';
 import websocket from '@fastify/websocket';
 import { WebSocketServer, WebSocket } from 'ws';
+import { homedir } from 'os';
+import * as path from 'path';
 import { configStore } from '../config/store.js';
 import type { Config, IncomingMessage, Message, Session } from '../types.js';
 import { AgentRunner } from '../agent/runner.js';
 import { TokenManager } from '../agent/token-manager.js';
-import { builtinTools, executeTool } from '../agent/tools.js';
+import { MemoryManager } from '../agent/memory/index.js';
+import { SessionManager } from '../agent/sessions/index.js';
+import { builtinTools } from '../agent/tools.js';
 import {
   AnthropicProvider,
   OpenAIProvider,
@@ -25,10 +29,11 @@ export class Gateway {
   private fastify = Fastify({ logger: true });
   private wss?: WebSocketServer;
   private clients = new Map<string, WSClient>();
-  private sessions = new Map<string, Session>();
   private channels: Array<DiscordChannel | TelegramChannel> = [];
   private agent?: AgentRunner;
   private tokenManager?: TokenManager;
+  private memoryManager?: MemoryManager;
+  private sessionManager?: SessionManager;
   private config: Config;
 
   constructor() {
@@ -36,13 +41,22 @@ export class Gateway {
   }
 
   async start(): Promise<void> {
+    await this.setupMemory();
     this.setupProviders();
     this.setupTokenManager();
+    await this.setupSessions();
     await this.setupChannels();
-    this.setupAgent();
+    await this.setupAgent();
     await this.startServer();
     this.setupWebSocket();
     console.log(`Gateway started on port ${this.config.gateway.port}`);
+  }
+
+  private async setupMemory(): Promise<void> {
+    const workspacePath = path.join(homedir(), '.openkairo', 'workspace');
+    this.memoryManager = new MemoryManager(workspacePath);
+    await this.memoryManager.initialize();
+    console.log('Memory manager initialized');
   }
 
   private setupProviders(): void {
@@ -75,7 +89,14 @@ export class Gateway {
     this.tokenManager = new TokenManager(this.config.tokenManagement);
   }
 
-  private setupAgent(): void {
+  private async setupSessions(): Promise<void> {
+    const sessionsPath = path.join(homedir(), '.openkairo', 'workspace', 'sessions');
+    this.sessionManager = new SessionManager(sessionsPath, 30);
+    await this.sessionManager.initialize();
+    console.log('Session manager initialized');
+  }
+
+  private async setupAgent(): Promise<void> {
     const provider = providerRegistry.get(this.config.defaultProvider);
     if (!provider) {
       throw new Error(`Provider ${this.config.defaultProvider} not registered`);
@@ -86,13 +107,13 @@ export class Gateway {
         name: 'default',
         model: this.config.providers.anthropic?.model || 'claude-sonnet-4-20250514',
         provider,
-        systemPrompt: `Eres OpenKairo, un asistente de IA personal. 
-Respondes de manera útil y amigable.
-Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y más.`,
         tools: builtinTools,
       },
-      this.tokenManager!
+      this.tokenManager!,
+      this.memoryManager!
     );
+
+    await this.agent.initialize();
   }
 
   private async setupChannels(): Promise<void> {
@@ -119,14 +140,29 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
     await this.fastify.register(websocket);
 
     this.fastify.get('/health', async () => {
-      return { status: 'ok', channels: this.channels.map(c => c.id) };
+      return { 
+        status: 'ok', 
+        channels: this.channels.map(c => c.id),
+        sessions: this.sessionManager?.getSessionCount() || 0
+      };
     });
 
     this.fastify.get('/stats', async () => {
       return {
-        sessions: this.sessions.size,
+        sessions: this.sessionManager?.getSessionCount() || 0,
         clients: this.clients.size,
         usage: this.tokenManager?.getUsageStats('anthropic') || [],
+        memory: {
+          facts: this.memoryManager?.getFacts().size || 0,
+          preferences: this.memoryManager?.getPreferences().size || 0,
+        }
+      };
+    });
+
+    this.fastify.get('/memory', async () => {
+      return {
+        facts: Object.fromEntries(this.memoryManager?.getFacts() || new Map()),
+        preferences: Object.fromEntries(this.memoryManager?.getPreferences() || new Map()),
       };
     });
 
@@ -204,17 +240,10 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
   }
 
   private createSession(channelId: string, userId: string): string {
-    const sessionId = `${channelId}:${userId}`;
-    const session: Session = {
-      id: sessionId,
-      channelId,
-      userId,
-      messages: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    this.sessions.set(sessionId, session);
-    return sessionId;
+    if (!this.sessionManager) return `${channelId}:${userId}`;
+    
+    const session = this.sessionManager.createSession(channelId, userId);
+    return session.id;
   }
 
   private async handleChat(client: WSClient, content: string): Promise<void> {
@@ -223,7 +252,12 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
       return;
     }
 
-    const session = this.sessions.get(client.sessionId);
+    if (!this.sessionManager || !this.agent) {
+      client.socket.send(JSON.stringify({ error: 'Managers not initialized' }));
+      return;
+    }
+
+    const session = this.sessionManager.getSession(client.sessionId);
     if (!session) {
       client.socket.send(JSON.stringify({ error: 'Session not found' }));
       return;
@@ -235,15 +269,11 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
       content,
       timestamp: Date.now(),
     };
-    session.messages.push(userMessage);
-    session.updatedAt = Date.now();
+    
+    this.sessionManager.addMessage(client.sessionId, userMessage);
 
-    if (!this.agent) {
-      client.socket.send(JSON.stringify({ error: 'Agent not initialized' }));
-      return;
-    }
-
-    const stream = this.agent.run(session.messages);
+    const sessionMessages = this.sessionManager.getMessages(client.sessionId);
+    const stream = this.agent.run(sessionMessages);
 
     let fullResponse = '';
     for await (const chunk of stream) {
@@ -261,7 +291,10 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
       content: fullResponse,
       timestamp: Date.now(),
     };
-    session.messages.push(assistantMessage);
+    
+    this.sessionManager.addMessage(client.sessionId, assistantMessage);
+    
+    await this.agent.learnFromConversation(content, fullResponse);
 
     client.socket.send(JSON.stringify({
       type: 'done',
@@ -270,11 +303,12 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
   }
 
   private async handleIncomingMessage(message: IncomingMessage): Promise<void> {
-    const sessionId = `${message.channelId}:${message.from}`;
-    let session = this.sessions.get(sessionId);
+    if (!this.sessionManager || !this.agent) return;
+
+    let session = this.sessionManager.getSession(`${message.channelId}:${message.from}`);
 
     if (!session) {
-      session = this.createSession(message.channelId, message.from);
+      session = this.sessionManager.createSession(message.channelId, message.from);
     }
 
     const userMessage: Message = {
@@ -283,11 +317,11 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
       content: message.content,
       timestamp: message.timestamp,
     };
-    session.messages.push(userMessage);
+    
+    this.sessionManager.addMessage(session.id, userMessage);
 
-    if (!this.agent) return;
-
-    const stream = this.agent.run(session.messages);
+    const sessionMessages = this.sessionManager.getMessages(session.id);
+    const stream = this.agent.run(sessionMessages);
     let response = '';
 
     for await (const chunk of stream) {
@@ -305,13 +339,18 @@ Tienes acceso a herramientas para ejecutar comandos, leer/escribir archivos, y m
       content: response,
       timestamp: Date.now(),
     };
-    session.messages.push(assistantMessage);
+    
+    this.sessionManager.addMessage(session.id, assistantMessage);
+    
+    await this.agent.learnFromConversation(message.content, response);
   }
 
   async stop(): Promise<void> {
     for (const channel of this.channels) {
       await channel.stop();
     }
+
+    await this.sessionManager?.saveAll();
 
     if (this.wss) {
       this.wss.close();
