@@ -41,9 +41,26 @@ openkairo config set providers.anthropic.apiKey "sk-ant-..."
 ## Uso
 
 ```bash
-# Iniciar el Gateway
+# Iniciar el Gateway (en una terminal)
 npm run dev -- start
 
+# Iniciar la TUI (en otra terminal)
+npm run dev -- tui
+```
+
+### Navegación TUI
+
+- `[1]` Chat - Chatear con el agente
+- `[2]` Historial - Ver conversaciones pasadas
+- `[3]` Admin - Stats y memoria
+- `[4]` Settings - Cambiar provider/modelo
+- `[r]` Actualizar - Refresh en Admin
+- `[h]` Ayuda - Mostrar ayuda
+- `[q]` Salir - Cerrar TUI
+
+### Otros comandos
+
+```bash
 # Ver workspace
 openkairo workspace
 

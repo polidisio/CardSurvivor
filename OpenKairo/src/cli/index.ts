@@ -210,6 +210,14 @@ program
     console.log('  - sessions/   : Historial de conversaciones');
   });
 
+program
+  .command('tui')
+  .description('Inicia la interfaz TUI')
+  .action(async () => {
+    const { startTUI } = await import('../tui/index.js');
+    startTUI();
+  });
+
 function question(prompt: string): Promise<string> {
   return new Promise((resolve) => {
     process.stdout.write(prompt);
