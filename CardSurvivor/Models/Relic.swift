@@ -102,11 +102,32 @@ struct Relic: Identifiable, Codable {
             Relic(id: "paladin_aura", name: "Aura de Luz", nameEn: "Aura of Light", description: "+3 Regeneración", rarity: .epic, type: .regeneration, value: 3, icon: "sun.max.fill", targetClass: .paladin),
             Relic(id: "paladin_armor", name: "Armadura Divina", nameEn: "Divine Armor", description: "+20 HP máx", rarity: .epic, type: .extraHP, value: 20, icon: "shield.lefthalf.filled", targetClass: .paladin),
             Relic(id: "paladin_crown", name: "Corona del Santo", nameEn: "Saint's Crown", description: "+5 Regeneración", rarity: .legendary, type: .regeneration, value: 5, icon: "crown.fill", targetClass: .paladin),
+            
+            // === RELIQUIAS DE BOSS DE FASE ===
+            // Fase 1 - Espada del Guerrero
+            Relic(id: "boss_sword_phase1", name: "Espada del Guerrero", nameEn: "Warrior's Sword", description: "+15% Daño", rarity: .epic, type: .extraDamage, value: 15, icon: "sword.fill", targetClass: nil),
+            // Fase 2 - Amuleto del Mago
+            Relic(id: "boss_amulet_phase2", name: "Amuleto del Mago", nameEn: "Mage's Amulet", description: "+2 Energía máx", rarity: .epic, type: .extraEnergy, value: 2, icon: "medal.fill", targetClass: nil),
+            // Fase 3 - Daga del Pícaro
+            Relic(id: "boss_dagger_phase3", name: "Daga del Pícaro", nameEn: "Rogue's Dagger", description: "+15% Robo vida", rarity: .epic, type: .lifesteal, value: 15, icon: "dagger.fill", targetClass: nil),
+            // Fase 4 - Escudo del Paladín
+            Relic(id: "boss_shield_phase4", name: "Escudo del Paladín", nameEn: "Paladin's Shield", description: "+30% Regeneración", rarity: .epic, type: .regeneration, value: 30, icon: "shield.checkered", targetClass: nil),
+            // Fase 5 - Señor de las Sombras (reliquia final)
+            Relic(id: "boss_shadows_crown", name: "Corona de las Sombras", nameEn: "Crown of Shadows", description: "+25% a todo", rarity: .legendary, type: .extraDamage, value: 25, icon: "moon.stars.fill", targetClass: nil),
+            
+            // === RELIQUIA DE DIFICULTAD ===
+            Relic(id: "hero_badge", name: "Insignia del Héroe", nameEn: "Hero Badge", description: "Modo difícil +10% Daño", rarity: .legendary, type: .extraDamage, value: 10, icon: "star.circle.fill", targetClass: nil),
         ]
     }
     
     static func relic(byId id: String) -> Relic? {
         allRelics.first { $0.id == id }
+    }
+    
+    static var bossRelics: [Relic] {
+        allRelics.filter { relic in
+            ["boss_sword_phase1", "boss_amulet_phase2", "boss_dagger_phase3", "boss_shield_phase4", "boss_shadows_crown"].contains(relic.id)
+        }
     }
 }
 

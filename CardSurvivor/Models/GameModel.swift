@@ -2,24 +2,37 @@ import Foundation
 
 // MARK: - Game State
 enum GameState {
+    case mainMenu
     case classSelection
-    case menu
+    case classDetails
     case profile
+    case settings
     case playing
     case playerTurn
     case enemyTurn
     case shop
     case relicShop
     case waveComplete
+    case phaseComplete
+    case bossReward
     case gameOver
+}
+
+// MARK: - Difficulty
+enum GameDifficulty: String, Codable {
+    case normal = "normal"
+    case hard = "hard"
 }
 
 // MARK: - Game Model
 class GameModel: ObservableObject {
-    @Published var state: GameState = .classSelection
+    @Published var state: GameState = .mainMenu
+    @Published var selectedClassForDetails: PlayerClass? = nil
     @Published var player: Player = Player()
     @Published var enemies: [Enemy] = []
     @Published var wave: Int = 1
+    @Published var currentPhase: Int = 1
+    @Published var difficulty: GameDifficulty = .normal
     @Published var score: Int = 0
     @Published var selectedCard: Card?
     @Published var selectedEnemy: Enemy?
@@ -27,7 +40,13 @@ class GameModel: ObservableObject {
     @Published var showMessage: Bool = false
     @Published var playerBlock: Int = 0
     @Published var enemyBlock: Int = 0
-    @Published var gemsEarned: Int = 0  // Show at end of run
+    @Published var gemsEarned: Int = 0
+    @Published var bossRewards: [Relic] = []
+    @Published var isBossWave: Bool = false
+    
+    let maxPhase: Int = 5
+    let wavesPerPhase: Int = 5
+    let phaseScaling: Double = 0.15 // 15% increase per phase
     
     var progression: PlayerProgression = PlayerProgression.current
     var availableRelics: [Relic] = []
@@ -38,18 +57,25 @@ class GameModel: ObservableObject {
         set { UserDefaults.standard.set(newValue, forKey: "highScore") }
     }
     
+    var hardModeUnlocked: Bool {
+        get { UserDefaults.standard.bool(forKey: "hardModeUnlocked") }
+        set { UserDefaults.standard.set(newValue, forKey: "hardModeUnlocked") }
+    }
+    
     var shopCards: [Card] = []
     
     func selectClass(_ playerClass: PlayerClass) {
         guard progression.unlockedClasses.contains(playerClass) else { return }
         player = Player(playerClass: playerClass)
-        state = .menu
     }
     
-    func startNewGame() {
-        enemies = Enemy.generate(for: 1)
-        generateEnemyIntents()
+    func startNewGame(difficulty: GameDifficulty = .normal) {
+        self.difficulty = difficulty
+        currentPhase = 1
         wave = 1
+        isBossWave = false
+        enemies = Enemy.generate(for: wave, phase: currentPhase, difficulty: difficulty)
+        generateEnemyIntents()
         score = 0
         playerBlock = 0
         enemyBlock = 0
@@ -60,12 +86,32 @@ class GameModel: ObservableObject {
     
     func startNextWave() {
         wave += 1
-        enemies = Enemy.generate(for: wave)
+        
+        // Check if we should fight a boss (after wave 5 of each phase)
+        if wave > wavesPerPhase {
+            // Boss wave!
+            isBossWave = true
+            enemies = generateBoss(for: currentPhase)
+        } else {
+            isBossWave = false
+            enemies = Enemy.generate(for: wave, phase: currentPhase, difficulty: difficulty)
+        }
+        
         generateEnemyIntents()
         playerBlock = 0
         enemyBlock = 0
         player.startTurn()
         state = .playerTurn
+    }
+    
+    func generateBoss(for phase: Int) -> [Enemy] {
+        if phase == maxPhase {
+            // Final boss - Señor de las Sombras
+            return [Enemy(type: .finalBoss, wave: phase * wavesPerPhase)]
+        } else {
+            // Regular phase boss
+            return [Enemy(type: .boss, wave: phase * wavesPerPhase, phase: phase)]
+        }
     }
     
     func generateEnemyIntents() {
@@ -203,9 +249,6 @@ class GameModel: ObservableObject {
     
     func checkTurnEnd() {
         if enemies.isEmpty {
-            if wave >= 20 {
-                gameWon = true
-            }
             waveComplete()
             return
         }
@@ -231,9 +274,6 @@ class GameModel: ObservableObject {
         enemies.removeAll { $0.isDead }
         
         if enemies.isEmpty {
-            if wave >= 20 {
-                gameWon = true
-            }
             waveComplete()
             return
         }
@@ -318,7 +358,84 @@ class GameModel: ObservableObject {
             }
         }.shuffled().prefix(6).map { $0 }
         
-        state = .waveComplete
+        // Check if boss was defeated
+        if isBossWave {
+            // Boss defeated!
+            if currentPhase == maxPhase {
+                // Final boss defeated - Victory!
+                gameWon = true
+                gameOver()
+            } else {
+                // Regular boss defeated - show reward selection
+                generateBossRewards()
+                state = .bossReward
+            }
+        } else {
+            // Regular wave complete
+            state = .waveComplete
+        }
+    }
+    
+    func generateBossRewards() {
+        // Generate 3 relic options for the player to choose
+        let allRelics = Relic.bossRelics.filter { relic in
+            !progression.ownedRelics.contains(relic.id)
+        }
+        
+        let shuffled = allRelics.shuffled()
+        bossRewards = Array(shuffled.prefix(3))
+        
+        // If not enough relics, add some random ones
+        while bossRewards.count < 3 {
+            let randomRelic = Relic.allRelics.randomElement()
+            if let relic = randomRelic, !bossRewards.contains(where: { $0.id == relic.id }) {
+                bossRewards.append(relic)
+            }
+        }
+    }
+    
+    func selectBossReward(_ relic: Relic) {
+        // Add the selected relic to player's owned relics
+        progression = PlayerProgression.current
+        progression.addRelic(relic.id)
+        progression.equipRelic(relic.id)
+        PlayerProgression.current = progression
+        
+        showTemporaryMessage("✅ \(relic.name) conseguida!")
+        
+        // Show phase complete screen
+        state = .phaseComplete
+    }
+    
+    func completePhase() {
+        // Heal player 50%
+        let healAmount = player.maxHp / 2
+        player.heal(healAmount)
+        
+        // Move to next phase
+        currentPhase += 1
+        wave = 0  // Will become 1 in startNextWave
+        
+        // Generate boss rewards for next phase boss
+        generateBossRewards()
+        
+        // Go to shop before next phase
+        shopCards = Card.allCards.filter { card in
+            switch player.level {
+            case 1: return card.rarity == .common
+            case 2: return card.rarity == .common || card.rarity == .uncommon
+            case 3: return card.rarity != .legendary
+            default: return true
+            }
+        }.shuffled().prefix(6).map { $0 }
+        
+        state = .shop
+    }
+    
+    func claimPhaseGems() {
+        let phaseGems = currentPhase * 10
+        gemsEarned = phaseGems
+        claimGems()
     }
     
     func gameOver() {
@@ -326,6 +443,11 @@ class GameModel: ObservableObject {
         progression = PlayerProgression.current
         progression.completeGame(wave: wave, score: score, won: gameWon)
         PlayerProgression.current = progression
+        
+        // Unlock hard mode if won on normal
+        if gameWon && difficulty == .normal && !hardModeUnlocked {
+            hardModeUnlocked = true
+        }
         
         if score > highScore {
             highScore = score
