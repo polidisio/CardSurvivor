@@ -165,18 +165,92 @@ struct ProfileView: View {
             
             ScrollView {
                 VStack(spacing: 20) {
+                    // Player Stats Section
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("TU PERSONAJE").font(.headline).foregroundColor(.gray)
+                        
+                        // Class & Level
+                        HStack(spacing: 12) {
+                            ZStack {
+                                Circle().fill(classColor.opacity(0.2)).frame(width: 50, height: 50)
+                                Image(systemName: game.player.playerClass.icon).font(.system(size: 24)).foregroundColor(classColor)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(game.player.playerClass.name).font(.headline).foregroundColor(.white)
+                                HStack {
+                                    Text("Nivel \(game.player.level)").font(.subheadline).foregroundColor(classColor)
+                                    Text("•").foregroundColor(.gray)
+                                    Text("\(game.player.experience)/\(game.player.expToLevelUp) XP").font(.caption).foregroundColor(.gray)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(hex: "2C2C2E"))
+                        .cornerRadius(10)
+                        
+                        // XP Progress Bar
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                Rectangle().fill(Color.gray.opacity(0.3)).frame(height: 8).cornerRadius(4)
+                                Rectangle().fill(classColor).frame(width: geometry.size.width * game.player.experienceProgress, height: 8).cornerRadius(4)
+                            }
+                        }
+                        .frame(height: 8)
+                        .padding(.horizontal)
+                        
+                        // Main Stats Grid
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                            StatBox(title: "HP", value: "\(game.player.hp)/\(game.player.maxHp)", icon: "heart.fill", color: .red)
+                            StatBox(title: "Energía", value: "\(game.player.maxEnergy)", icon: "bolt.fill", color: Color(hex: "FFD60A"))
+                            StatBox(title: "Daño", value: "\(game.player.damageBuff)", icon: "flame.fill", color: .orange)
+                            StatBox(title: "Bloqueo", value: "\(game.player.relicBonusBlock)", icon: "shield.fill", color: Color(hex: "0A84FF"))
+                            StatBox(title: "Robo Vida", value: "\(game.player.lifestealPercent)%", icon: "drop.fill", color: Color(hex: "FF453A"))
+                            StatBox(title: "Regeneración", value: "\(game.player.regeneration)", icon: "plus.circle.fill", color: Color(hex: "30D158"))
+                            StatBox(title: "Robar", value: "+\(game.player.extraCardDraw)", icon: "arrow.down.circle.fill", color: Color(hex: "BF5AF2"))
+                            StatBox(title: "Oro", value: "\(game.player.gold)", icon: "dollarsign.circle.fill", color: Color(hex: "FFD60A"))
+                        }
+                    }.padding()
+                    
+                    // Relic Bonuses Section
+                    if !game.progression.equippedRelics.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("BONIFICACIONES ACTIVAS").font(.headline).foregroundColor(.gray)
+                            
+                            ForEach(game.progression.equippedRelics, id: \.self) { relicId in
+                                if let relic = Relic.relic(byId: relicId) {
+                                    let appliesToClass = relic.targetClass == nil || relic.targetClass == game.player.playerClass
+                                    if appliesToClass {
+                                        HStack {
+                                            Image(systemName: relic.icon).foregroundColor(Color(hex: relic.rarity.color))
+                                            Text(relic.name).font(.subheadline).foregroundColor(.white)
+                                            Spacer()
+                                            Text(relic.description).font(.caption).foregroundColor(classColor)
+                                        }
+                                        .padding()
+                                        .background(Color(hex: "2C2C2E"))
+                                        .cornerRadius(10)
+                                    }
+                                }
+                            }
+                        }.padding()
+                    }
+                    
+                    // Global Stats Section
                     VStack(alignment: .leading, spacing: 10) {
                         Text("ESTADÍSTICAS").font(.headline).foregroundColor(.gray)
                         HStack { StatBox(title: "Victorias", value: "\(game.progression.totalWins)", icon: "trophy.fill", color: Color(hex: "FFD60A")); StatBox(title: "Mejor Ola", value: "\(game.progression.bestWave)", icon: "flag.fill", color: Color(hex: "30D158")) }
                         HStack { StatBox(title: "Partidas", value: "\(game.progression.totalGames)", icon: "gamecontroller.fill", color: Color(hex: "BF5AF2")); StatBox(title: "Gemas", value: "\(game.progression.gems)", icon: "diamond.fill", color: Color(hex: "00D4FF")) }
                     }.padding()
                     
+                    // Equipped Relics Section
                     VStack(alignment: .leading, spacing: 10) {
                         Text("RELIQUIAS EQUIPADAS (\(game.progression.equippedRelics.count)/3)").font(.headline).foregroundColor(.gray)
-                        if game.progression.equippedRelics.isEmpty { Text("Toca una reliquia para equiparla").foregroundColor(.gray).padding() }
+                        if game.progression.equippedRelics.isEmpty { Text("No tienes reliquias equipadas").foregroundColor(.gray).padding() }
                         else { ForEach(game.progression.equippedRelics, id: \.self) { relicId in if let relic = Relic.relic(byId: relicId) { RelicRow(relic: relic, isEquipped: true).onTapGesture { game.unequipRelic(relic) } } } }
                     }.padding()
                     
+                    // Collection Section
                     if !game.progression.ownedRelics.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("TU COLECCIÓN").font(.headline).foregroundColor(.gray)
@@ -186,6 +260,10 @@ struct ProfileView: View {
                 }
             }
         }.background(Color(hex: "1C1C1E"))
+    }
+    
+    var classColor: Color {
+        switch game.player.playerClass { case .warrior: return .red; case .mage: return .blue; case .rogue: return .green; case .paladin: return .yellow }
     }
 }
 
