@@ -4,12 +4,12 @@ import Foundation
 enum GameState {
     case classSelection
     case menu
-    case profile  // NEW: Profile/Relics screen
+    case profile
     case playing
     case playerTurn
     case enemyTurn
     case shop
-    case relicShop  // NEW: Buy relics
+    case relicShop
     case waveComplete
     case gameOver
 }

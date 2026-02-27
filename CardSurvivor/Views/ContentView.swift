@@ -40,8 +40,10 @@ struct ClassSelectionView: View {
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                 ForEach(PlayerClass.allCases) { playerClass in
-                    ClassCard(playerClass: playerClass, isUnlocked: game.progression.unlockedClasses.contains(playerClass))
-                        .onTapGesture {
+                    ClassCard(
+                        playerClass: playerClass,
+                        isUnlocked: game.progression.unlockedClasses.contains(playerClass),
+                        onTap: {
                             if game.progression.unlockedClasses.contains(playerClass) {
                                 game.selectClass(playerClass)
                                 game.startNewGame()
@@ -49,6 +51,7 @@ struct ClassSelectionView: View {
                                 game.unlockClass(playerClass)
                             }
                         }
+                    )
                 }
             }
             .padding(.horizontal)
@@ -64,25 +67,42 @@ struct ClassSelectionView: View {
 struct ClassCard: View {
     let playerClass: PlayerClass
     let isUnlocked: Bool
+    var onTap: () -> Void = {}
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             ZStack {
                 Circle().fill(classColor.opacity(0.2)).frame(width: 60, height: 60)
                 Image(systemName: playerClass.icon).font(.system(size: 30)).foregroundColor(isUnlocked ? classColor : .gray)
             }
             Text(playerClass.name).font(.headline).fontWeight(.bold).foregroundColor(isUnlocked ? .white : .gray)
-            if !isUnlocked {
+            
+            if isUnlocked {
+                Text(playerClass.passiveAbility).font(.caption2).foregroundColor(classColor).lineLimit(2)
+                HStack(spacing: 8) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "heart.fill").font(.caption2)
+                        Text("\(playerClass.baseHP)").font(.caption2)
+                    }.foregroundColor(.red)
+                    HStack(spacing: 2) {
+                        Image(systemName: "bolt.fill").font(.caption2)
+                        Text("\(playerClass.baseEnergy)").font(.caption2)
+                    }.foregroundColor(Color(hex: "FFD60A"))
+                }
+                Text("Toca para jugar").font(.caption2).foregroundColor(.gray)
+            } else {
                 HStack(spacing: 4) {
                     Image(systemName: "diamond.fill").font(.caption2)
                     Text("\(playerClass.unlockCost)").font(.caption)
                 }.foregroundColor(Color(hex: "00D4FF"))
-            } else {
-                Text(playerClass.passiveAbility).font(.caption2).foregroundColor(classColor).lineLimit(2)
+                Text("Toca para desbloquear").font(.caption2).foregroundColor(.gray)
             }
         }
         .padding().frame(maxWidth: .infinity).background(Color(hex: "2C2C2E")).cornerRadius(15)
         .overlay(RoundedRectangle(cornerRadius: 15).stroke(isUnlocked ? classColor.opacity(0.5) : Color.gray.opacity(0.3), lineWidth: 2))
+        .onTapGesture {
+            onTap()
+        }
     }
     
     var classColor: Color {
