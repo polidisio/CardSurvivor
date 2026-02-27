@@ -104,6 +104,9 @@ struct Player {
         
         for relicId in progression.equippedRelics {
             if let relic = Relic.relic(byId: relicId) {
+                let appliesToClass = relic.targetClass == nil || relic.targetClass == playerClass
+                guard appliesToClass else { continue }
+                
                 switch relic.type {
                 case .extraHP: relicBonusHP += relic.value
                 case .extraDamage: relicBonusDamage += relic.value
@@ -113,6 +116,8 @@ struct Player {
                 case .extraCardDraw: relicBonusCardDraw += relic.value
                 case .goldMultiplier: relicGoldMultiplier += Double(relic.value) / 100.0
                 case .expMultiplier: relicExpMultiplier += Double(relic.value) / 100.0
+                case .regeneration: regeneration += relic.value
+                case .criticalChance, .dodge: break
                 }
             }
         }

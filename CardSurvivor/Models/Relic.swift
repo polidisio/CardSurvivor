@@ -29,6 +29,9 @@ enum RelicType: String, Codable {
     case extraCardDraw
     case goldMultiplier
     case expMultiplier
+    case regeneration
+    case criticalChance
+    case dodge
 }
 
 // MARK: - Relic
@@ -41,40 +44,64 @@ struct Relic: Identifiable, Codable {
     let type: RelicType
     let value: Int
     let icon: String
+    let targetClass: PlayerClass? // nil = todas las clases
     
     var isOwned: Bool {
         get { UserDefaults.standard.bool(forKey: "relic_\(id)_owned") }
         set { UserDefaults.standard.set(newValue, forKey: "relic_\(id)_owned") }
     }
     
+    var effectiveFor: PlayerClass {
+        targetClass ?? .warrior
+    }
+    
     static var allRelics: [Relic] {
         [
-            // COMMON - Easy to get
-            Relic(id: "old_key", name: "Llave Antigua", nameEn: "Old Key", description: "+5 HP máx", rarity: .common, type: .extraHP, value: 5, icon: "key.fill"),
-            Relic(id: "rusty_coin", name: "Moneda Oxidada", nameEn: "Rusty Coin", description: "+10% Gold", rarity: .common, type: .goldMultiplier, value: 10, icon: "centsign.circle"),
-            Relic(id: "broken_shield", name: "Escudo Roto", nameEn: "Broken Shield", description: "+3 Bloqueo", rarity: .common, type: .extraBlock, value: 3, icon: "shield.slash"),
-            Relic(id: "stone", name: "Piedra", nameEn: "Stone", description: "+2 Daño", rarity: .common, type: .extraDamage, value: 2, icon: "circle.fill"),
+            // === RELIQUIAS GENÉRICAS (todas las clases) ===
+            
+            // COMMON
+            Relic(id: "old_key", name: "Llave Antigua", nameEn: "Old Key", description: "+5 HP máx", rarity: .common, type: .extraHP, value: 5, icon: "key.fill", targetClass: nil),
+            Relic(id: "rusty_coin", name: "Moneda Oxidada", nameEn: "Rusty Coin", description: "+10% Oro", rarity: .common, type: .goldMultiplier, value: 10, icon: "centsign.circle", targetClass: nil),
+            Relic(id: "broken_shield", name: "Escudo Roto", nameEn: "Broken Shield", description: "+3 Bloqueo", rarity: .common, type: .extraBlock, value: 3, icon: "shield.slash", targetClass: nil),
+            Relic(id: "stone", name: "Piedra", nameEn: "Stone", description: "+2 Daño", rarity: .common, type: .extraDamage, value: 2, icon: "circle.fill", targetClass: nil),
             
             // UNCOMMON
-            Relic(id: "silver_pendant", name: "Collar de Plata", nameEn: "Silver Pendant", description: "+10 HP máx", rarity: .uncommon, type: .extraHP, value: 10, icon: "sparkles"),
-            Relic(id: "dagger", name: "Daga Vieja", nameEn: "Old Dagger", description: "+5 Daño", rarity: .uncommon, type: .extraDamage, value: 5, icon: "knife"),
-            Relic(id: "energy_crystal", name: "Cristal de Energía", nameEn: "Energy Crystal", description: "+1 Energía máx", rarity: .uncommon, type: .extraEnergy, value: 1, icon: "bolt.fill"),
-            Relic(id: "vintage_book", name: "Libro Vintage", nameEn: "Vintage Book", description: "+1 Robar cartas", rarity: .uncommon, type: .extraCardDraw, value: 1, icon: "book.fill"),
+            Relic(id: "silver_pendant", name: "Collar de Plata", nameEn: "Silver Pendant", description: "+10 HP máx", rarity: .uncommon, type: .extraHP, value: 10, icon: "sparkles", targetClass: nil),
+            Relic(id: "vintage_book", name: "Libro Vintage", nameEn: "Vintage Book", description: "+1 Robar cartas", rarity: .uncommon, type: .extraCardDraw, value: 1, icon: "book.fill", targetClass: nil),
+            Relic(id: "royal_scepter", name: "Cetro Real", nameEn: "Royal Scepter", description: "+15% Oro", rarity: .rare, type: .goldMultiplier, value: 15, icon: "crown.fill", targetClass: nil),
+            Relic(id: "ancient_tome", name: "Tomo Antiguo", nameEn: "Ancient Tome", description: "+15% XP", rarity: .rare, type: .expMultiplier, value: 15, icon: "book.closed.fill", targetClass: nil),
             
-            // RARE
-            Relic(id: "gold_ring", name: "Anillo de Oro", nameEn: "Gold Ring", description: "+5% Robovida", rarity: .rare, type: .lifesteal, value: 5, icon: "heart.circle"),
-            Relic(id: "royal_scepter", name: "Cetro Real", nameEn: "Royal Scepter", description: "+15% Gold", rarity: .rare, type: .goldMultiplier, value: 15, icon: "crown.fill"),
-            Relic(id: "ancient_tome", name: "Tomo Antiguo", nameEn: "Ancient Tome", description: "+15% XP", rarity: .rare, type: .expMultiplier, value: 15, icon: "book.closed.fill"),
-            Relic(id: "emerald", name: "Esmeralda", nameEn: "Emerald", description: "+15 HP máx", rarity: .rare, type: .extraHP, value: 15, icon: "diamond.fill"),
+            // === RELIQUIAS DEL GUERRERO ===
+            Relic(id: "warrior_gloves", name: "Guantes de Guerra", nameEn: "Warrior Gloves", description: "+5 Daño", rarity: .common, type: .extraDamage, value: 5, icon: "hand.raised.fill", targetClass: .warrior),
+            Relic(id: "warrior_helm", name: "Elmo del Capitán", nameEn: "Captain's Helm", description: "+15 HP máx", rarity: .uncommon, type: .extraHP, value: 15, icon: "shield.fill", targetClass: .warrior),
+            Relic(id: "warrior_axe", name: "Hacha de Batalla", nameEn: "Battle Axe", description: "+10 Daño", rarity: .rare, type: .extraDamage, value: 10, icon: "axe.fill", targetClass: .warrior),
+            Relic(id: "warrior_armor", name: "Armadura de Acero", nameEn: "Steel Armor", description: "+10 Bloqueo", rarity: .rare, type: .extraBlock, value: 10, icon: "shield.lefthalf.filled", targetClass: .warrior),
+            Relic(id: "warrior_master", name: "Espada Legendaria", nameEn: "Legendary Sword", description: "+20 Daño", rarity: .epic, type: .extraDamage, value: 20, icon: "sword.fill", targetClass: .warrior),
+            Relic(id: "warrior_crown", name: "Corona del Rey Guerrero", nameEn: "Crown of the Warrior King", description: "+30% Daño", rarity: .legendary, type: .extraDamage, value: 30, icon: "crown.fill", targetClass: .warrior),
             
-            // EPIC
-            Relic(id: "ruby", name: "Rubí", nameEn: "Ruby", description: "+10% Robovida", rarity: .epic, type: .lifesteal, value: 10, icon: "heart.fill"),
-            Relic(id: "sapphire", name: "Zafiro", nameEn: "Sapphire", description: "+2 Energía máx", rarity: .epic, type: .extraEnergy, value: 2, icon: "hexagon.fill"),
-            Relic(id: "dragon_scale", name: "Escama de Dragón", nameEn: "Dragon Scale", description: "+10 Daño", rarity: .epic, type: .extraDamage, value: 10, icon: "flame.fill"),
+            // === RELIQUIAS DEL MAGO ===
+            Relic(id: "mage_wand", name: "Varita de Aprendiz", nameEn: "Apprentice Wand", description: "+1 Energía máx", rarity: .common, type: .extraEnergy, value: 1, icon: "wand.and.stars", targetClass: .mage),
+            Relic(id: "mage_crystal", name: "Cristal Mágico", nameEn: "Magic Crystal", description: "+2 Energía máx", rarity: .uncommon, type: .extraEnergy, value: 2, icon: "diamond.fill", targetClass: .mage),
+            Relic(id: "mage_tome", name: "Tomo Arcano", nameEn: "Arcane Tome", description: "+1 Robar cartas", rarity: .rare, type: .extraCardDraw, value: 1, icon: "book.fill", targetClass: .mage),
+            Relic(id: "mage_staff", name: "Báculo del Archimago", nameEn: "Archmage Staff", description: "+3 Energía máx", rarity: .epic, type: .extraEnergy, value: 3, icon: "staff.fill", targetClass: .mage),
+            Relic(id: "mage_orb", name: "Orbe del Poder", nameEn: "Orb of Power", description: "+2 Robar cartas", rarity: .epic, type: .extraCardDraw, value: 2, icon: "circle.hexagongrid.fill", targetClass: .mage),
+            Relic(id: "mage_crown", name: "Corona del Archimago", nameEn: "Archmage Crown", description: "+4 Energía máx", rarity: .legendary, type: .extraEnergy, value: 4, icon: "crown.fill", targetClass: .mage),
             
-            // LEGENDARY
-            Relic(id: "crown", name: "Corona", nameEn: "Crown", description: "+25% Todo", rarity: .legendary, type: .extraDamage, value: 25, icon: "crown.fill"),
-            Relic(id: "phoenix", name: "Pluma de Fénix", nameEn: "Phoenix Feather", description: "+30 HP + Respawn", rarity: .legendary, type: .extraHP, value: 30, icon: "sun.max.fill"),
+            // === RELIQUIAS DEL PÍCARO ===
+            Relic(id: "rogue_dagger", name: "Daga Envenenada", nameEn: "Poisoned Dagger", description: "+5% Robo vida", rarity: .common, type: .lifesteal, value: 5, icon: "knife", targetClass: .rogue),
+            Relic(id: "rogue_ring", name: "Anillo del Asesino", nameEn: "Assassin's Ring", description: "+10% Robo vida", rarity: .uncommon, type: .lifesteal, value: 10, icon: "circle.fill", targetClass: .rogue),
+            Relic(id: "rogue_cloak", name: "Capa de Sombras", nameEn: "Cloak of Shadows", description: "+10% Crit", rarity: .rare, type: .criticalChance, value: 10, icon: "wind", targetClass: .rogue),
+            Relic(id: "rogue_poison", name: "Veneno Mortal", nameEn: "Deadly Poison", description: "+15% Robo vida", rarity: .epic, type: .lifesteal, value: 15, icon: "flame.fill", targetClass: .rogue),
+            Relic(id: "rogue_master", name: "Espada Fantasma", nameEn: "Ghost Sword", description: "+20% Robo vida", rarity: .epic, type: .lifesteal, value: 20, icon: "ghost.fill", targetClass: .rogue),
+            Relic(id: "rogue_crown", name: "Corona del Maestro Asesino", nameEn: "Master Assassin Crown", description: "+30% Robo vida", rarity: .legendary, type: .lifesteal, value: 30, icon: "crown.fill", targetClass: .rogue),
+            
+            // === RELIQUIAS DEL PALADÍN ===
+            Relic(id: "paladin_holy_symbol", name: "Símbolo Sagrado", nameEn: "Holy Symbol", description: "+2 Regeneración", rarity: .common, type: .regeneration, value: 2, icon: "star.fill", targetClass: .paladin),
+            Relic(id: "paladin_shield", name: "Escudo Bendito", nameEn: "Blessed Shield", description: "+10 HP máx", rarity: .uncommon, type: .extraHP, value: 10, icon: "shield.fill", targetClass: .paladin),
+            Relic(id: "paladin_hammer", name: "Martillo Santo", nameEn: "Holy Hammer", description: "+5 Daño", rarity: .rare, type: .extraDamage, value: 5, icon: "hammer.fill", targetClass: .paladin),
+            Relic(id: "paladin_aura", name: "Aura de Luz", nameEn: "Aura of Light", description: "+3 Regeneración", rarity: .epic, type: .regeneration, value: 3, icon: "sun.max.fill", targetClass: .paladin),
+            Relic(id: "paladin_armor", name: "Armadura Divina", nameEn: "Divine Armor", description: "+20 HP máx", rarity: .epic, type: .extraHP, value: 20, icon: "shield.lefthalf.filled", targetClass: .paladin),
+            Relic(id: "paladin_crown", name: "Corona del Santo", nameEn: "Saint's Crown", description: "+5 Regeneración", rarity: .legendary, type: .regeneration, value: 5, icon: "crown.fill", targetClass: .paladin),
         ]
     }
     
