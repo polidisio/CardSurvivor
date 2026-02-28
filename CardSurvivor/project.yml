@@ -20,6 +20,9 @@ targets:
       - path: App
       - path: Models
       - path: Views
+      - path: Managers
+      - path: ../Music
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yourname.cardSurvivor
