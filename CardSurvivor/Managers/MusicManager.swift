@@ -13,14 +13,17 @@ class MusicManager: ObservableObject {
     
     // Track names (without extension)
     let tracks: [String: String] = [
-        "menu": "01_Menu_Gothic",
-        "exploration": "02_Exploration",
-        "exploration2": "03_Exploration_2",
-        "castle": "04_Castle",
-        "combat": "05_Combat",
-        "boss": "06_Boss",
-        "cave": "07_Cave",
-        "village": "08_Village"
+        "menu": "menu",
+        "exploration1": "exploracion 1",
+        "exploration2": "Exploracion 2",
+        "exploration3": "exploracion 3",
+        "exploration4": "Exploracion 4",
+        "exploration5": "Exploracion 5",
+        "boss1": "Boss 1",
+        "boss2": "Boss 2",
+        "boss3": "Boss 3",
+        "boss4": "Boss 4",
+        "boss5": "Boss 5"
     ]
     
     private init() {

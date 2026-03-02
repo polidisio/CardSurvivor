@@ -8,43 +8,49 @@
 
 /* Begin PBXBuildFile section */
 		0166C21FEEC75519D85F987A /* Relic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AED5835A679923AFF74875 /* Relic.swift */; };
-		199EA415DDE02F3E16B17BDD /* 07_Cave.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 534CFC67A6809A666935C90A /* 07_Cave.ogg */; };
+		08F8472392BA85E573388957 /* Boss 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 93992772935708699DDFD77F /* Boss 2.mp3 */; };
+		0C2359804D7F92F300316095 /* Exploracion 4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 15493B2B1162A863E814A384 /* Exploracion 4.mp3 */; };
 		1A565510AF1DF32916CCD121 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F20CC6FB36347459C2A1C8C /* ContentView.swift */; };
+		1F0FD79DEE5D604CB486290A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DE7B4998687DCF867F1DFE8 /* Assets.xcassets */; };
 		2341A4CFF79E9094821ACC15 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0FA39ACE81DDCF10B1FF0B /* MusicManager.swift */; };
 		23B10B4D760EC7670B83165B /* CardSurvivorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6A7F1C699F83A70C19EE0 /* CardSurvivorApp.swift */; };
-		26989F7535C9EDA512F7E9A0 /* 05_Combat.ogg in Resources */ = {isa = PBXBuildFile; fileRef = A85653488637D3E84523FB93 /* 05_Combat.ogg */; };
-		325A03F7E68574D330F0F15D /* 04_Castle.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 79E4D11C3652B3F4740DDEF3 /* 04_Castle.ogg */; };
-		491A4CFBC5C64F087B06DF9F /* 06_Boss.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C244A00C220B63288EF9C696 /* 06_Boss.ogg */; };
-		53FC84F78DF26E3EA5B065C5 /* 01_Menu_Gothic.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 3772CE0EE02F316E0D5A97F9 /* 01_Menu_Gothic.ogg */; };
-		61D87D3BE538FB23857A9985 /* 02_Exploration.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 515D5B12617006A52C6B2D76 /* 02_Exploration.ogg */; };
-		63FD20652507F7A962B0194B /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = C79412C12E44BFA54BCA8523 /* README.txt */; };
+		2ECC38382E978C7CD1E0B4B5 /* menu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4FA9C9B5A92DBB37FD1F92C /* menu.mp3 */; };
 		6637BA8745C61CA6EF3378B6 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93371093522950ED10365395 /* Card.swift */; };
-		73A01E7C814646ED78562D97 /* 03_Exploration_2.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 963E09409243CDF648A59240 /* 03_Exploration_2.ogg */; };
+		88245B38754F4F1179EF164E /* Boss 4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0533B42EFB1E46485867EA3 /* Boss 4.mp3 */; };
 		9D2A849EE543549C98D25886 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1185EE9D55EAD3C6D122 /* Player.swift */; };
+		9E62E962C68C4CAC8D6D53D3 /* exploracion 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A7956E92CFF63225DCE26506 /* exploracion 3.mp3 */; };
+		9F15F27B1C4D6645A738760C /* Boss 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B58C588532B84BD794DAAB2A /* Boss 1.mp3 */; };
 		AE3A4083690F8720D43FCE96 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF4A2B87EFAACF7677C23B /* Enemy.swift */; };
+		AF4EA067AFA0A677C2F4458A /* exploracion 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 27B28F2EF8458164C54234C6 /* exploracion 1.mp3 */; };
+		B52125708366DFD8CC6F093D /* Boss 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BD231CF0F47AB3CF9D2CF964 /* Boss 5.mp3 */; };
+		C612C8FA7FDCF73F16D1C23D /* Exploracion 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0361D9FA29775C5445FA8E57 /* Exploracion 5.mp3 */; };
 		CD3208EE64E33E62571DAACA /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D6206F6551114EC49A8C3 /* GameModel.swift */; };
-		ECCCBB0486F33296328C482F /* 08_Village.ogg in Resources */ = {isa = PBXBuildFile; fileRef = CB0E1BD164A5058CC766E9E8 /* 08_Village.ogg */; };
+		CEBCD4B4236024106C94E183 /* Exploracion 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2592F3A1FA4C1F2A038910A0 /* Exploracion 2.mp3 */; };
+		EADA19B35BF4FE8FE53AAE01 /* Boss 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3420906ADFDE0FD04D00D329 /* Boss 3.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0361D9FA29775C5445FA8E57 /* Exploracion 5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Exploracion 5.mp3"; sourceTree = "<group>"; };
+		15493B2B1162A863E814A384 /* Exploracion 4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Exploracion 4.mp3"; sourceTree = "<group>"; };
 		16EB1185EE9D55EAD3C6D122 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		3772CE0EE02F316E0D5A97F9 /* 01_Menu_Gothic.ogg */ = {isa = PBXFileReference; path = 01_Menu_Gothic.ogg; sourceTree = "<group>"; };
+		2592F3A1FA4C1F2A038910A0 /* Exploracion 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Exploracion 2.mp3"; sourceTree = "<group>"; };
+		27B28F2EF8458164C54234C6 /* exploracion 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "exploracion 1.mp3"; sourceTree = "<group>"; };
+		3420906ADFDE0FD04D00D329 /* Boss 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 3.mp3"; sourceTree = "<group>"; };
 		37EF4A2B87EFAACF7677C23B /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		4BF6A7F1C699F83A70C19EE0 /* CardSurvivorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSurvivorApp.swift; sourceTree = "<group>"; };
-		515D5B12617006A52C6B2D76 /* 02_Exploration.ogg */ = {isa = PBXFileReference; path = 02_Exploration.ogg; sourceTree = "<group>"; };
-		534CFC67A6809A666935C90A /* 07_Cave.ogg */ = {isa = PBXFileReference; path = 07_Cave.ogg; sourceTree = "<group>"; };
-		79E4D11C3652B3F4740DDEF3 /* 04_Castle.ogg */ = {isa = PBXFileReference; path = 04_Castle.ogg; sourceTree = "<group>"; };
+		4DE7B4998687DCF867F1DFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A0FA39ACE81DDCF10B1FF0B /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
 		8F20CC6FB36347459C2A1C8C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		93371093522950ED10365395 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		963E09409243CDF648A59240 /* 03_Exploration_2.ogg */ = {isa = PBXFileReference; path = 03_Exploration_2.ogg; sourceTree = "<group>"; };
+		93992772935708699DDFD77F /* Boss 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 2.mp3"; sourceTree = "<group>"; };
 		A0AED5835A679923AFF74875 /* Relic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relic.swift; sourceTree = "<group>"; };
 		A5244F56F7A433A0B0F5CC50 /* CardSurvivor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CardSurvivor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A85653488637D3E84523FB93 /* 05_Combat.ogg */ = {isa = PBXFileReference; path = 05_Combat.ogg; sourceTree = "<group>"; };
+		A7956E92CFF63225DCE26506 /* exploracion 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "exploracion 3.mp3"; sourceTree = "<group>"; };
+		B58C588532B84BD794DAAB2A /* Boss 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 1.mp3"; sourceTree = "<group>"; };
+		BD231CF0F47AB3CF9D2CF964 /* Boss 5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 5.mp3"; sourceTree = "<group>"; };
 		C21D6206F6551114EC49A8C3 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
-		C244A00C220B63288EF9C696 /* 06_Boss.ogg */ = {isa = PBXFileReference; path = 06_Boss.ogg; sourceTree = "<group>"; };
-		C79412C12E44BFA54BCA8523 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		CB0E1BD164A5058CC766E9E8 /* 08_Village.ogg */ = {isa = PBXFileReference; path = 08_Village.ogg; sourceTree = "<group>"; };
+		E0533B42EFB1E46485867EA3 /* Boss 4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 4.mp3"; sourceTree = "<group>"; };
+		F4FA9C9B5A92DBB37FD1F92C /* menu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = menu.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -59,6 +65,7 @@
 		35F74B03075B2EDAA7FA4A1A = {
 			isa = PBXGroup;
 			children = (
+				4DE7B4998687DCF867F1DFE8 /* Assets.xcassets */,
 				6D1878EA0972FD44747AB0CB /* App */,
 				07CD6A270183DC62136B0440 /* Managers */,
 				92E5D2ED49DF1DD67A30F695 /* Models */,
@@ -107,15 +114,17 @@
 		FD8D9A596672759D95DF23A3 /* Music */ = {
 			isa = PBXGroup;
 			children = (
-				3772CE0EE02F316E0D5A97F9 /* 01_Menu_Gothic.ogg */,
-				515D5B12617006A52C6B2D76 /* 02_Exploration.ogg */,
-				963E09409243CDF648A59240 /* 03_Exploration_2.ogg */,
-				79E4D11C3652B3F4740DDEF3 /* 04_Castle.ogg */,
-				A85653488637D3E84523FB93 /* 05_Combat.ogg */,
-				C244A00C220B63288EF9C696 /* 06_Boss.ogg */,
-				534CFC67A6809A666935C90A /* 07_Cave.ogg */,
-				CB0E1BD164A5058CC766E9E8 /* 08_Village.ogg */,
-				C79412C12E44BFA54BCA8523 /* README.txt */,
+				B58C588532B84BD794DAAB2A /* Boss 1.mp3 */,
+				93992772935708699DDFD77F /* Boss 2.mp3 */,
+				3420906ADFDE0FD04D00D329 /* Boss 3.mp3 */,
+				E0533B42EFB1E46485867EA3 /* Boss 4.mp3 */,
+				BD231CF0F47AB3CF9D2CF964 /* Boss 5.mp3 */,
+				27B28F2EF8458164C54234C6 /* exploracion 1.mp3 */,
+				2592F3A1FA4C1F2A038910A0 /* Exploracion 2.mp3 */,
+				A7956E92CFF63225DCE26506 /* exploracion 3.mp3 */,
+				15493B2B1162A863E814A384 /* Exploracion 4.mp3 */,
+				0361D9FA29775C5445FA8E57 /* Exploracion 5.mp3 */,
+				F4FA9C9B5A92DBB37FD1F92C /* menu.mp3 */,
 			);
 			name = Music;
 			path = ../Music;
@@ -181,15 +190,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53FC84F78DF26E3EA5B065C5 /* 01_Menu_Gothic.ogg in Resources */,
-				61D87D3BE538FB23857A9985 /* 02_Exploration.ogg in Resources */,
-				73A01E7C814646ED78562D97 /* 03_Exploration_2.ogg in Resources */,
-				325A03F7E68574D330F0F15D /* 04_Castle.ogg in Resources */,
-				26989F7535C9EDA512F7E9A0 /* 05_Combat.ogg in Resources */,
-				491A4CFBC5C64F087B06DF9F /* 06_Boss.ogg in Resources */,
-				199EA415DDE02F3E16B17BDD /* 07_Cave.ogg in Resources */,
-				ECCCBB0486F33296328C482F /* 08_Village.ogg in Resources */,
-				63FD20652507F7A962B0194B /* README.txt in Resources */,
+				1F0FD79DEE5D604CB486290A /* Assets.xcassets in Resources */,
+				9F15F27B1C4D6645A738760C /* Boss 1.mp3 in Resources */,
+				08F8472392BA85E573388957 /* Boss 2.mp3 in Resources */,
+				EADA19B35BF4FE8FE53AAE01 /* Boss 3.mp3 in Resources */,
+				88245B38754F4F1179EF164E /* Boss 4.mp3 in Resources */,
+				B52125708366DFD8CC6F093D /* Boss 5.mp3 in Resources */,
+				CEBCD4B4236024106C94E183 /* Exploracion 2.mp3 in Resources */,
+				0C2359804D7F92F300316095 /* Exploracion 4.mp3 in Resources */,
+				C612C8FA7FDCF73F16D1C23D /* Exploracion 5.mp3 in Resources */,
+				AF4EA067AFA0A677C2F4458A /* exploracion 1.mp3 in Resources */,
+				9E62E962C68C4CAC8D6D53D3 /* exploracion 3.mp3 in Resources */,
+				2ECC38382E978C7CD1E0B4B5 /* menu.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

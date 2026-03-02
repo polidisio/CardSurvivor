@@ -29,33 +29,40 @@ struct MainMenuView: View {
     @ObservedObject var game: GameModel
     
     var body: some View {
-        VStack(spacing: 30) {
-            Spacer()
-            VStack(spacing: 10) {
-                Text("CARD").font(.system(size: 48, weight: .bold)).foregroundColor(Color(hex: "BF5AF2"))
-                Text("SURVIVOR").font(.system(size: 48, weight: .bold)).foregroundColor(.white)
+        ZStack {
+            Image("menu")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .overlay(Color.black.opacity(0.6))
+                .ignoresSafeArea()
+            
+            VStack(spacing: 30) {
+                Spacer()
+                VStack(spacing: 10) {
+                    Text("CARD").font(.system(size: 48, weight: .bold)).foregroundColor(Color(hex: "BF5AF2"))
+                    Text("SURVIVOR").font(.system(size: 48, weight: .bold)).foregroundColor(.white)
+                }
+                Spacer()
+                VStack(spacing: 15) {
+                    Button(action: { game.state = .classSelection }) {
+                        HStack { Image(systemName: "play.fill").font(.title2); Text("JUGAR").font(.title2).fontWeight(.bold) }
+                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "BF5AF2")).cornerRadius(15)
+                    }
+                    Button(action: { game.state = .profile }) {
+                        HStack { Image(systemName: "person.circle.fill").font(.title2); Text("PERFIL").font(.title2).fontWeight(.bold) }
+                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
+                    }
+                    Button(action: { game.state = .settings }) {
+                        HStack { Image(systemName: "gearshape.fill").font(.title2); Text("AJUSTES").font(.title2).fontWeight(.bold) }
+                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
+                    }
+                }
+                Spacer()
+                HStack { Image(systemName: "diamond.fill").foregroundColor(Color(hex: "00D4FF")); Text("\(game.progression.gems)").foregroundColor(Color(hex: "00D4FF")).font(.headline) }
+                .padding(.horizontal, 16).padding(.vertical, 8).background(Color(hex: "00D4FF").opacity(0.2)).cornerRadius(20)
+                Spacer()
             }
-            Spacer()
-            VStack(spacing: 15) {
-                Button(action: { game.state = .classSelection }) {
-                    HStack { Image(systemName: "play.fill").font(.title2); Text("JUGAR").font(.title2).fontWeight(.bold) }
-                    .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "BF5AF2")).cornerRadius(15)
-                }
-                Button(action: { game.state = .profile }) {
-                    HStack { Image(systemName: "person.circle.fill").font(.title2); Text("PERFIL").font(.title2).fontWeight(.bold) }
-                    .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
-                }
-                Button(action: { game.state = .settings }) {
-                    HStack { Image(systemName: "gearshape.fill").font(.title2); Text("AJUSTES").font(.title2).fontWeight(.bold) }
-                    .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
-                }
-            }
-            Spacer()
-            HStack { Image(systemName: "diamond.fill").foregroundColor(Color(hex: "00D4FF")); Text("\(game.progression.gems)").foregroundColor(Color(hex: "00D4FF")).font(.headline) }
-            .padding(.horizontal, 16).padding(.vertical, 8).background(Color(hex: "00D4FF").opacity(0.2)).cornerRadius(20)
-            Spacer()
         }
-        .background(Color(hex: "1C1C1E"))
     }
 }
 

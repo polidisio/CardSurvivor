@@ -21,6 +21,7 @@ targets:
       - path: Models
       - path: Views
       - path: Managers
+      - path: Assets.xcassets
       - path: ../Music
         buildPhase: resources
     settings:
