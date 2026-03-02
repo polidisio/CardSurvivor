@@ -120,62 +120,172 @@ struct SettingsView: View {
     }
 }
 
-struct ClassSelectionView: View {
-    @ObservedObject var game: GameModel
+struct TarotClassCard: View {
+    let playerClass: PlayerClass
+    let isSelected: Bool
+    
+    @State private var glowOpacity: Double = 0.5
     
     var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Button(action: { game.state = .mainMenu }) { Image(systemName: "chevron.left").foregroundColor(.white) }
-                Spacer()
-                Text("SELECCIONA CLASE").font(.headline).foregroundColor(.white)
-                Spacer()
-            }
-            .padding().background(Color(hex: "2C2C2E"))
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "1C1C1E"), Color(hex: "2C2C2E")]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
             
-            ScrollView {
-                VStack(spacing: 15) {
-                    Button(action: {
-                        game.selectedClassForDetails = .warrior
-                        game.state = .classDetails
-                    }) {
-                        classCard("Guerrero", hp: PlayerClass.warrior.baseHP, energy: PlayerClass.warrior.baseEnergy)
-                    }
-                    Button(action: {
-                        game.selectedClassForDetails = .mage
-                        game.state = .classDetails
-                    }) {
-                        classCard("Mago", hp: PlayerClass.mage.baseHP, energy: PlayerClass.mage.baseEnergy)
-                    }
-                    Button(action: {
-                        game.selectedClassForDetails = .rogue
-                        game.state = .classDetails
-                    }) {
-                        classCard("Pícaro", hp: PlayerClass.rogue.baseHP, energy: PlayerClass.rogue.baseEnergy)
-                    }
-                    Button(action: {
-                        game.selectedClassForDetails = .paladin
-                        game.state = .classDetails
-                    }) {
-                        classCard("Paladín", hp: PlayerClass.paladin.baseHP, energy: PlayerClass.paladin.baseEnergy)
+            HStack(spacing: 0) {
+                Image(classImageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 140)
+                    .clipped()
+                    .cornerRadius(8)
+                    .padding(.leading, 8)
+                    .padding(.vertical, 12)
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(playerClass.name)
+                        .font(.gothicTitle2)
+                        .foregroundColor(.white)
+                        .shadow(color: Color(hex: "DC143C").opacity(isSelected ? glowOpacity : 0), radius: 10)
+                    
+                    Text(playerClass.description)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: "sparkles").foregroundColor(Color(hex: "FFD60A"))
+                        Text(playerClass.passiveAbility)
+                            .font(.caption2)
+                            .foregroundColor(Color(hex: "FFD60A"))
                     }
                 }
-                .padding()
+                .padding(.vertical, 15)
+                .padding(.horizontal, 12)
+                
+                Spacer()
+                
+                VStack(spacing: 8) {
+                    StatBadge(icon: "heart.fill", value: "\(playerClass.baseHP)", color: .red)
+                    StatBadge(icon: "bolt.fill", value: "\(playerClass.baseEnergy)", color: Color(hex: "FFD60A"))
+                    StatBadge(icon: "flame.fill", value: "\(playerClass.baseDamage)", color: .orange)
+                }
+                .padding(.trailing, 15)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                        isSelected ? Color(hex: "DC143C") : Color(hex: "3C3C3E"),
+                        lineWidth: isSelected ? 3 : 1
+                    )
+                    .shadow(color: Color(hex: "DC143C").opacity(isSelected ? glowOpacity : 0), radius: isSelected ? 15 : 0)
+            )
+            .cornerRadius(12)
+        }
+        .frame(width: 340, height: 165)
+        .scaleEffect(isSelected ? 1.0 : 0.9)
+        .opacity(isSelected ? 1.0 : 0.7)
+        .animation(.easeInOut(duration: 0.3), value: isSelected)
+        .onAppear {
+            if isSelected {
+                withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                    glowOpacity = 0.8
+                }
             }
         }
-        .background(Color(hex: "1C1C1E"))
     }
     
-    func classCard(_ name: String, hp: Int, energy: Int) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(name).font(.headline).foregroundColor(.white)
-                Text("HP: \(hp) | Energía: \(energy)").font(.caption).foregroundColor(.gray)
-            }
-            Spacer()
-            Image(systemName: "chevron.right").foregroundColor(.gray)
+    var classImageName: String {
+        switch playerClass {
+        case .warrior: return "Guerrero"
+        case .mage: return "Mago"
+        case .rogue: return "Picaro"
+        case .paladin: return "Paladin"
         }
-        .padding().background(Color(hex: "2C2C2E")).cornerRadius(10)
+    }
+}
+
+struct StatBadge: View {
+    let icon: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon).font(.caption2).foregroundColor(color)
+            Text(value).font(.caption).fontWeight(.bold).foregroundColor(.white)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(color.opacity(0.2))
+        .cornerRadius(8)
+    }
+}
+
+struct ClassSelectionView: View {
+    @ObservedObject var game: GameModel
+    @State private var selectedIndex: Int = 0
+    
+    private let classes = PlayerClass.allCases
+    
+    var body: some View {
+        ZStack {
+            Color(hex: "1C1C1E").ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                HStack {
+                    Button(action: { game.state = .mainMenu }) { Image(systemName: "chevron.left").foregroundColor(.white) }
+                    Spacer()
+                    Text("SELECCIONA TU DESTINO")
+                        .font(.gothicTitle2)
+                        .foregroundColor(.white)
+                    Spacer()
+                    Color.clear.frame(width: 24)
+                }
+                .padding()
+                .background(Color(hex: "2C2C2E"))
+                
+                TabView(selection: $selectedIndex) {
+                    ForEach(Array(classes.enumerated()), id: \.offset) { index, playerClass in
+                        VStack(spacing: 20) {
+                            TarotClassCard(playerClass: playerClass, isSelected: true)
+                                .onTapGesture {
+                                    game.selectedClassForDetails = playerClass
+                                    game.state = .classDetails
+                                }
+                            
+                            Button(action: {
+                                game.selectedClassForDetails = playerClass
+                                game.state = .classDetails
+                            }) {
+                                Text("SELECCIONAR")
+                                    .font(.gothicButton)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .frame(width: 200, height: 50)
+                                    .background(Color(hex: "DC143C"))
+                                    .cornerRadius(25)
+                                    .shadow(color: Color(hex: "DC143C").opacity(0.5), radius: 10)
+                            }
+                        }
+                        .tag(index)
+                    }
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                
+                HStack(spacing: 8) {
+                    ForEach(0..<classes.count, id: \.self) { index in
+                        Circle()
+                            .fill(index == selectedIndex ? Color(hex: "DC143C") : Color.gray.opacity(0.5))
+                            .frame(width: 10, height: 10)
+                            .animation(.easeInOut(duration: 0.2), value: selectedIndex)
+                    }
+                }
+                .padding(.bottom, 30)
+            }
+        }
     }
 }
 
