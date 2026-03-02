@@ -231,78 +231,84 @@ struct ClassSelectionView: View {
     private let classes = PlayerClass.allCases
     
     var body: some View {
-        ZStack {
-            Image("CardBackground")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-                .overlay(Color.black.opacity(0.5))
-            
-            VStack(spacing: 20) {
-                Text("SELECCIONA TU DESTINO")
-                    .font(.gothicTitle2)
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.8), radius: 5)
-                    .padding(.top, 60)
+        GeometryReader { geometry in
+            ZStack {
+                // Imagen de fondo
+                Image("CardBackground")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
+                    .overlay(Color.black.opacity(0.6))
                 
-                Spacer()
-                
-                TabView(selection: $selectedIndex) {
-                    ForEach(Array(classes.enumerated()), id: \.offset) { index, playerClass in
-                        VStack(spacing: 20) {
-                            TarotClassCard(playerClass: playerClass, isSelected: true)
-                                .onTapGesture {
-                                    game.selectedClassForDetails = playerClass
-                                    game.state = .classDetails
-                                }
-                            
-                            Button(action: {
-                                game.selectedClassForDetails = playerClass
-                                game.state = .classDetails
-                            }) {
-                                Text("SELECCIONAR")
-                                    .font(.gothicButton)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(width: 200, height: 50)
-                                    .background(Color(hex: "DC143C"))
-                                    .cornerRadius(25)
-                                    .shadow(color: Color(hex: "DC143C").opacity(0.5), radius: 10)
-                            }
+                // Botón volver
+                VStack {
+                    HStack {
+                        Button(action: { game.state = .mainMenu }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color.black.opacity(0.5))
+                                .clipShape(Circle())
                         }
-                        .tag(index)
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                
-                HStack(spacing: 8) {
-                    ForEach(0..<classes.count, id: \.self) { index in
-                        Circle()
-                            .fill(index == selectedIndex ? Color(hex: "DC143C") : Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                            .animation(.easeInOut(duration: 0.2), value: selectedIndex)
-                    }
-                }
-                .padding(.bottom, 40)
-            }
-            
-            // Botón flotante volver
-            VStack {
-                HStack {
-                    Button(action: { game.state = .mainMenu }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(.white)
-                            .padding(12)
-                            .background(Color.black.opacity(0.6))
-                            .clipShape(Circle())
+                        .padding(.leading, 20)
+                        .padding(.top, 20)
+                        Spacer()
                     }
                     Spacer()
                 }
-                Spacer()
+                
+                VStack(spacing: 20) {
+                    // Título grande centrado
+                    Text("SELECCIONA TU DESTINO")
+                        .font(.gothicTitle2)
+                        .foregroundColor(.white)
+                        .shadow(color: .black, radius: 5)
+                        .padding(.top, 60)
+                    
+                    Spacer()
+                    
+                    TabView(selection: $selectedIndex) {
+                        ForEach(0..<classes.count, id: \.self) { index in
+                            let playerClass = classes[index]
+                            VStack(spacing: 15) {
+                                TarotClassCard(playerClass: playerClass, isSelected: true)
+                                    .onTapGesture {
+                                        game.selectedClassForDetails = playerClass
+                                        game.state = .classDetails
+                                    }
+                                
+                                Button(action: {
+                                    game.selectedClassForDetails = playerClass
+                                    game.state = .classDetails
+                                }) {
+                                    Text("SELECCIONAR")
+                                        .font(.gothicButton)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                        .frame(width: 180, height: 45)
+                                        .background(Color(hex: "DC143C"))
+                                        .cornerRadius(20)
+                                        .shadow(color: Color(hex: "DC143C").opacity(0.5), radius: 8)
+                                }
+                            }
+                            .tag(index)
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    
+                    HStack(spacing: 8) {
+                        ForEach(0..<classes.count, id: \.self) { index in
+                            Circle()
+                                .fill(index == selectedIndex ? Color(hex: "DC143C") : Color.gray.opacity(0.5))
+                                .frame(width: 10, height: 10)
+                                .animation(.easeInOut(duration: 0.2), value: selectedIndex)
+                        }
+                    }
+                    .padding(.bottom, 40)
+                }
             }
-            .padding(.leading, 20)
-            .padding(.top, 50)
         }
     }
 }
