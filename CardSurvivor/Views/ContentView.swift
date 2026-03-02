@@ -25,6 +25,39 @@ struct ContentView: View {
     }
 }
 
+struct MoonlightText: View {
+    let text: String
+    let baseColor: Color
+    let glowColor: Color
+    
+    @State private var pulseAmount: CGFloat = 0.5
+    
+    var body: some View {
+        ZStack {
+            Text(text)
+                .font(.gothicTitle)
+                .foregroundColor(glowColor.opacity(pulseAmount + 0.4))
+                .blur(radius: 25)
+                .scaleEffect(1.15)
+            
+            Text(text)
+                .font(.gothicTitle)
+                .foregroundColor(glowColor.opacity(pulseAmount + 0.2))
+                .blur(radius: 12)
+                .scaleEffect(1.08)
+            
+            Text(text)
+                .font(.gothicTitle)
+                .foregroundColor(baseColor)
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+                pulseAmount = 0.8
+            }
+        }
+    }
+}
+
 struct MainMenuView: View {
     @ObservedObject var game: GameModel
     
@@ -39,23 +72,14 @@ struct MainMenuView: View {
             VStack(spacing: 30) {
                 Spacer()
                 VStack(spacing: 10) {
-                    Text("CARD").font(.gothicTitle).foregroundColor(Color(hex: "DC143C"))
-                    Text("SURVIVOR").font(.gothicTitle).foregroundColor(.white)
+                    MoonlightText(text: "CARD", baseColor: Color(hex: "DC143C"), glowColor: Color(hex: "FF6B6B"))
+                    MoonlightText(text: "SURVIVOR", baseColor: .white, glowColor: Color(hex: "E8F4FF"))
                 }
                 Spacer()
-                VStack(spacing: 15) {
-                    Button(action: { game.state = .classSelection }) {
-                        HStack { Image(systemName: "play.fill").font(.title2); Text("JUGAR").font(.gothicButton).fontWeight(.bold) }
-                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "DC143C")).cornerRadius(15)
-                    }
-                    Button(action: { game.state = .profile }) {
-                        HStack { Image(systemName: "person.circle.fill").font(.title2); Text("PERFIL").font(.gothicButton).fontWeight(.bold) }
-                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
-                    }
-                    Button(action: { game.state = .settings }) {
-                        HStack { Image(systemName: "gearshape.fill").font(.title2); Text("AJUSTES").font(.gothicButton).fontWeight(.bold) }
-                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
-                    }
+                VStack(spacing: 20) {
+                    ImageButton(normalImage: "Next_Unpressed", pressedImage: "Next_Pressed", title: "JUGAR", action: { game.state = .classSelection })
+                    ImageButton(normalImage: "Stats_Unpressed", pressedImage: "Stats_Pressed", title: "PERFIL", action: { game.state = .profile })
+                    ImageButton(normalImage: "Info_Unpressed", pressedImage: "Info_Pressed", title: "AJUSTES", action: { game.state = .settings })
                 }
                 Spacer()
                 HStack { Image(systemName: "diamond.fill").foregroundColor(Color(hex: "00D4FF")); Text("\(game.progression.gems)").foregroundColor(Color(hex: "00D4FF")).font(.headline) }
