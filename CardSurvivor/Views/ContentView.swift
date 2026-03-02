@@ -224,6 +224,120 @@ struct StatBadge: View {
     }
 }
 
+struct DeckPreviewView: View {
+    let playerClass: PlayerClass
+    let onSelect: () -> Void
+    
+    private var deck: [Card] {
+        Player.createStartingDeck(for: playerClass)
+    }
+    
+    var body: some View {
+        VStack(spacing: 15) {
+            Text("MAZO INICIAL - \(playerClass.name.uppercased())")
+                .font(.gothicBody)
+                .foregroundColor(.white)
+                .shadow(color: .black, radius: 3)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(deck, id: \.id) { card in
+                        SmallCardPreview(card: card)
+                    }
+                }
+                .padding(.horizontal, 20)
+            }
+            
+            Button(action: onSelect) {
+                Text("JUGAR")
+                    .font(.gothicButton)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .frame(width: 180, height: 45)
+                    .background(Color(hex: "DC143C"))
+                    .cornerRadius(20)
+                    .shadow(color: Color(hex: "DC143C").opacity(0.5), radius: 8)
+            }
+        }
+        .padding(.vertical, 20)
+    }
+}
+
+struct SmallCardPreview: View {
+    let card: Card
+    
+    var body: some View {
+        ZStack {
+            Image("CardFrame")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 80, height: 110)
+            
+            VStack(spacing: 2) {
+                HStack {
+                    Image(systemName: iconForCardType(card.type))
+                        .font(.caption2)
+                        .foregroundColor(cardColor)
+                    Spacer()
+                    Text("\(card.cost)")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
+                        .background(cardColor)
+                        .cornerRadius(4)
+                }
+                .padding(.horizontal, 6)
+                .padding(.top, 8)
+                
+                Spacer()
+                
+                Text(card.name)
+                    .font(.system(size: 8))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                    .padding(.horizontal, 4)
+                
+                Text("\(card.value)")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(cardColor)
+                
+                Text(card.description)
+                    .font(.system(size: 6))
+                    .foregroundColor(.gray)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 4)
+            }
+            .frame(width: 70, height: 100)
+        }
+    }
+    
+    var cardColor: Color {
+        switch card.type {
+        case .attack: return Color(hex: "FF453A")
+        case .defense: return Color(hex: "0A84FF")
+        case .power: return Color(hex: "BF5AF2")
+        case .draw: return Color(hex: "30D158")
+        case .special: return Color(hex: "FFD60A")
+        }
+    }
+    
+    func iconForCardType(_ type: Card.CardType) -> String {
+        switch type {
+        case .attack: return "bolt.fill"
+        case .defense: return "shield.fill"
+        case .power: return "star.fill"
+        case .draw: return "arrow.down.circle.fill"
+        case .special: return "sparkles"
+        }
+    }
+}
+
 struct ClassSelectionView: View {
     @ObservedObject var game: GameModel
     @State private var selectedIndex: Int = 0
@@ -270,39 +384,50 @@ struct ClassSelectionView: View {
                     Spacer()
                     
                     TabView(selection: $selectedIndex) {
-                        ForEach(0..<classes.count, id: \.self) { index in
-                            let playerClass = classes[index]
+                        // Slides de cada clase: Card + Mazo (2 por clase)
+                        ForEach(0..<classes.count, id: \.self) { classIndex in
+                            let playerClass = classes[classIndex]
+                            
+                            // Slide 1: Card de la clase
                             VStack(spacing: 15) {
                                 TarotClassCard(playerClass: playerClass, isSelected: true)
-                                    .onTapGesture {
-                                        game.selectedClassForDetails = playerClass
-                                        game.state = .classDetails
-                                    }
                                 
                                 Button(action: {
-                                    game.selectedClassForDetails = playerClass
-                                    game.state = .classDetails
+                                    withAnimation {
+                                        // Ir al slide del mazo
+                                        selectedIndex = classIndex * 2 + 1
+                                    }
                                 }) {
-                                    Text("SELECCIONAR")
+                                    Text("VER MAZO")
                                         .font(.gothicButton)
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
                                         .frame(width: 180, height: 45)
-                                        .background(Color(hex: "DC143C"))
+                                        .background(Color(hex: "BF5AF2"))
                                         .cornerRadius(20)
-                                        .shadow(color: Color(hex: "DC143C").opacity(0.5), radius: 8)
+                                        .shadow(color: Color(hex: "BF5AF2").opacity(0.5), radius: 8)
                                 }
                             }
-                            .tag(index)
+                            .tag(classIndex * 2)
+                            
+                            // Slide 2: Mazo de cartas
+                            VStack(spacing: 10) {
+                                DeckPreviewView(playerClass: playerClass) {
+                                    game.selectClass(playerClass)
+                                    game.startNewGame()
+                                }
+                            }
+                            .tag(classIndex * 2 + 1)
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     
+                    // 8 puntos indicadores (2 por clase)
                     HStack(spacing: 8) {
-                        ForEach(0..<classes.count, id: \.self) { index in
+                        ForEach(0..<(classes.count * 2), id: \.self) { index in
                             Circle()
                                 .fill(index == selectedIndex ? Color(hex: "DC143C") : Color.gray.opacity(0.5))
-                                .frame(width: 10, height: 10)
+                                .frame(width: 8, height: 8)
                                 .animation(.easeInOut(duration: 0.2), value: selectedIndex)
                         }
                     }
