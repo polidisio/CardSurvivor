@@ -17,15 +17,19 @@
 		2ECC38382E978C7CD1E0B4B5 /* menu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4FA9C9B5A92DBB37FD1F92C /* menu.mp3 */; };
 		6637BA8745C61CA6EF3378B6 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93371093522950ED10365395 /* Card.swift */; };
 		88245B38754F4F1179EF164E /* Boss 4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0533B42EFB1E46485867EA3 /* Boss 4.mp3 */; };
+		8F93B9E812415CC6EF1FD9A1 /* Seagram tfb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F83D1EEB5B0BF39DFCE2E89 /* Seagram tfb.ttf */; };
 		9D2A849EE543549C98D25886 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1185EE9D55EAD3C6D122 /* Player.swift */; };
 		9E62E962C68C4CAC8D6D53D3 /* exploracion 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A7956E92CFF63225DCE26506 /* exploracion 3.mp3 */; };
 		9F15F27B1C4D6645A738760C /* Boss 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B58C588532B84BD794DAAB2A /* Boss 1.mp3 */; };
 		AE3A4083690F8720D43FCE96 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF4A2B87EFAACF7677C23B /* Enemy.swift */; };
 		AF4EA067AFA0A677C2F4458A /* exploracion 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 27B28F2EF8458164C54234C6 /* exploracion 1.mp3 */; };
+		B39EDAA7241B3CFB6DD1AF0B /* Faith Collapsing.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE470CFC7A6FDF490B4B23F5 /* Faith Collapsing.ttf */; };
 		B52125708366DFD8CC6F093D /* Boss 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BD231CF0F47AB3CF9D2CF964 /* Boss 5.mp3 */; };
 		C612C8FA7FDCF73F16D1C23D /* Exploracion 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0361D9FA29775C5445FA8E57 /* Exploracion 5.mp3 */; };
 		CD3208EE64E33E62571DAACA /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21D6206F6551114EC49A8C3 /* GameModel.swift */; };
 		CEBCD4B4236024106C94E183 /* Exploracion 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2592F3A1FA4C1F2A038910A0 /* Exploracion 2.mp3 */; };
+		D7798E7A0FEA2AB2B3AECFB9 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17951A9ED7A24783AEDE31A /* CustomFont.swift */; };
+		E8383B076338A319E15B5F27 /* CloisterBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A718034112C685E09E56B5F /* CloisterBlack.ttf */; };
 		EADA19B35BF4FE8FE53AAE01 /* Boss 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3420906ADFDE0FD04D00D329 /* Boss 3.mp3 */; };
 /* End PBXBuildFile section */
 
@@ -35,10 +39,12 @@
 		16EB1185EE9D55EAD3C6D122 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		2592F3A1FA4C1F2A038910A0 /* Exploracion 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Exploracion 2.mp3"; sourceTree = "<group>"; };
 		27B28F2EF8458164C54234C6 /* exploracion 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "exploracion 1.mp3"; sourceTree = "<group>"; };
+		2A718034112C685E09E56B5F /* CloisterBlack.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CloisterBlack.ttf; sourceTree = "<group>"; };
 		3420906ADFDE0FD04D00D329 /* Boss 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 3.mp3"; sourceTree = "<group>"; };
 		37EF4A2B87EFAACF7677C23B /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		4BF6A7F1C699F83A70C19EE0 /* CardSurvivorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSurvivorApp.swift; sourceTree = "<group>"; };
 		4DE7B4998687DCF867F1DFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5F83D1EEB5B0BF39DFCE2E89 /* Seagram tfb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Seagram tfb.ttf"; sourceTree = "<group>"; };
 		7A0FA39ACE81DDCF10B1FF0B /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
 		8F20CC6FB36347459C2A1C8C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		93371093522950ED10365395 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -48,8 +54,10 @@
 		A7956E92CFF63225DCE26506 /* exploracion 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "exploracion 3.mp3"; sourceTree = "<group>"; };
 		B58C588532B84BD794DAAB2A /* Boss 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 1.mp3"; sourceTree = "<group>"; };
 		BD231CF0F47AB3CF9D2CF964 /* Boss 5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 5.mp3"; sourceTree = "<group>"; };
+		BE470CFC7A6FDF490B4B23F5 /* Faith Collapsing.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Faith Collapsing.ttf"; sourceTree = "<group>"; };
 		C21D6206F6551114EC49A8C3 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		E0533B42EFB1E46485867EA3 /* Boss 4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Boss 4.mp3"; sourceTree = "<group>"; };
+		F17951A9ED7A24783AEDE31A /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
 		F4FA9C9B5A92DBB37FD1F92C /* menu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = menu.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +70,16 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		218732BEBCC8192F4DE48276 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2A718034112C685E09E56B5F /* CloisterBlack.ttf */,
+				BE470CFC7A6FDF490B4B23F5 /* Faith Collapsing.ttf */,
+				5F83D1EEB5B0BF39DFCE2E89 /* Seagram tfb.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		35F74B03075B2EDAA7FA4A1A = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +88,7 @@
 				07CD6A270183DC62136B0440 /* Managers */,
 				92E5D2ED49DF1DD67A30F695 /* Models */,
 				FD8D9A596672759D95DF23A3 /* Music */,
+				218732BEBCC8192F4DE48276 /* Resources */,
 				379E1519EE08A1B45EEF6602 /* Views */,
 				390B66348F41F86545821493 /* Products */,
 			);
@@ -95,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				4BF6A7F1C699F83A70C19EE0 /* CardSurvivorApp.swift */,
+				F17951A9ED7A24783AEDE31A /* CustomFont.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -196,9 +216,12 @@
 				EADA19B35BF4FE8FE53AAE01 /* Boss 3.mp3 in Resources */,
 				88245B38754F4F1179EF164E /* Boss 4.mp3 in Resources */,
 				B52125708366DFD8CC6F093D /* Boss 5.mp3 in Resources */,
+				E8383B076338A319E15B5F27 /* CloisterBlack.ttf in Resources */,
 				CEBCD4B4236024106C94E183 /* Exploracion 2.mp3 in Resources */,
 				0C2359804D7F92F300316095 /* Exploracion 4.mp3 in Resources */,
 				C612C8FA7FDCF73F16D1C23D /* Exploracion 5.mp3 in Resources */,
+				B39EDAA7241B3CFB6DD1AF0B /* Faith Collapsing.ttf in Resources */,
+				8F93B9E812415CC6EF1FD9A1 /* Seagram tfb.ttf in Resources */,
 				AF4EA067AFA0A677C2F4458A /* exploracion 1.mp3 in Resources */,
 				9E62E962C68C4CAC8D6D53D3 /* exploracion 3.mp3 in Resources */,
 				2ECC38382E978C7CD1E0B4B5 /* menu.mp3 in Resources */,
@@ -215,6 +238,7 @@
 				6637BA8745C61CA6EF3378B6 /* Card.swift in Sources */,
 				23B10B4D760EC7670B83165B /* CardSurvivorApp.swift in Sources */,
 				1A565510AF1DF32916CCD121 /* ContentView.swift in Sources */,
+				D7798E7A0FEA2AB2B3AECFB9 /* CustomFont.swift in Sources */,
 				AE3A4083690F8720D43FCE96 /* Enemy.swift in Sources */,
 				CD3208EE64E33E62571DAACA /* GameModel.swift in Sources */,
 				2341A4CFF79E9094821ACC15 /* MusicManager.swift in Sources */,
@@ -300,6 +324,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -382,6 +407,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -39,21 +39,21 @@ struct MainMenuView: View {
             VStack(spacing: 30) {
                 Spacer()
                 VStack(spacing: 10) {
-                    Text("CARD").font(.system(size: 48, weight: .bold)).foregroundColor(Color(hex: "BF5AF2"))
-                    Text("SURVIVOR").font(.system(size: 48, weight: .bold)).foregroundColor(.white)
+                    Text("CARD").font(.gothicTitle).foregroundColor(Color(hex: "DC143C"))
+                    Text("SURVIVOR").font(.gothicTitle).foregroundColor(.white)
                 }
                 Spacer()
                 VStack(spacing: 15) {
                     Button(action: { game.state = .classSelection }) {
-                        HStack { Image(systemName: "play.fill").font(.title2); Text("JUGAR").font(.title2).fontWeight(.bold) }
-                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "BF5AF2")).cornerRadius(15)
+                        HStack { Image(systemName: "play.fill").font(.title2); Text("JUGAR").font(.gothicButton).fontWeight(.bold) }
+                        .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "DC143C")).cornerRadius(15)
                     }
                     Button(action: { game.state = .profile }) {
-                        HStack { Image(systemName: "person.circle.fill").font(.title2); Text("PERFIL").font(.title2).fontWeight(.bold) }
+                        HStack { Image(systemName: "person.circle.fill").font(.title2); Text("PERFIL").font(.gothicButton).fontWeight(.bold) }
                         .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
                     }
                     Button(action: { game.state = .settings }) {
-                        HStack { Image(systemName: "gearshape.fill").font(.title2); Text("AJUSTES").font(.title2).fontWeight(.bold) }
+                        HStack { Image(systemName: "gearshape.fill").font(.title2); Text("AJUSTES").font(.gothicButton).fontWeight(.bold) }
                         .foregroundColor(.white).frame(width: 220, height: 60).background(Color(hex: "2C2C2E")).cornerRadius(15)
                     }
                 }

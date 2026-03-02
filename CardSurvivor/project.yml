@@ -22,8 +22,17 @@ targets:
       - path: Views
       - path: Managers
       - path: Assets.xcassets
+      - path: Resources
+        buildPhase: resources
       - path: ../Music
         buildPhase: resources
+    info:
+      path: Info.plist
+      properties:
+        UIAppFonts:
+          - CloisterBlack.ttf
+          - Faith Collapsing.ttf
+          - Seagram tfb.ttf
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yourname.cardSurvivor
