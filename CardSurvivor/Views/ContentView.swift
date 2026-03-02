@@ -138,11 +138,11 @@ struct TarotClassCard: View {
                 Image(classImageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 140)
+                    .frame(width: 80, height: 110)
                     .clipped()
                     .cornerRadius(8)
                     .padding(.leading, 8)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 8)
                 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(playerClass.name)
@@ -184,7 +184,7 @@ struct TarotClassCard: View {
             )
             .cornerRadius(12)
         }
-        .frame(width: 340, height: 165)
+        .frame(width: 320, height: 150)
         .scaleEffect(isSelected ? 1.0 : 0.9)
         .opacity(isSelected ? 1.0 : 0.7)
         .animation(.easeInOut(duration: 0.3), value: isSelected)
@@ -232,20 +232,20 @@ struct ClassSelectionView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "1C1C1E").ignoresSafeArea()
+            Image("CardBackground")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+                .overlay(Color.black.opacity(0.5))
             
             VStack(spacing: 20) {
-                HStack {
-                    Button(action: { game.state = .mainMenu }) { Image(systemName: "chevron.left").foregroundColor(.white) }
-                    Spacer()
-                    Text("SELECCIONA TU DESTINO")
-                        .font(.gothicTitle2)
-                        .foregroundColor(.white)
-                    Spacer()
-                    Color.clear.frame(width: 24)
-                }
-                .padding()
-                .background(Color(hex: "2C2C2E"))
+                Text("SELECCIONA TU DESTINO")
+                    .font(.gothicTitle2)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.8), radius: 5)
+                    .padding(.top, 60)
+                
+                Spacer()
                 
                 TabView(selection: $selectedIndex) {
                     ForEach(Array(classes.enumerated()), id: \.offset) { index, playerClass in
@@ -283,8 +283,26 @@ struct ClassSelectionView: View {
                             .animation(.easeInOut(duration: 0.2), value: selectedIndex)
                     }
                 }
-                .padding(.bottom, 30)
+                .padding(.bottom, 40)
             }
+            
+            // Botón flotante volver
+            VStack {
+                HStack {
+                    Button(action: { game.state = .mainMenu }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .padding(12)
+                            .background(Color.black.opacity(0.6))
+                            .clipShape(Circle())
+                    }
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding(.leading, 20)
+            .padding(.top, 50)
         }
     }
 }
