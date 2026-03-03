@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Phishing - Formación en Seguridad</title>
+    <meta name="description" content="Landing page de concienciación en phishing. Aprende a identificar correos electrónicos sospechosos y protege tu información.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <script defer src="https://cdn.vercel.com/vercel/v0.8.1/analytics.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">Saraiba</span>
+            </div>
+            <div class="lang-switch">
+                <button id="lang-es" class="lang-btn active">ES</button>
+                <button id="lang-en" class="lang-btn">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-icon">🎯</div>
+                <h1 data-i18n="hero.title">Simulación de Phishing</h1>
+                <p class="hero-subtitle" data-i18n="hero.subtitle">Has participado en una simulación de seguridad. Es una oportunidad para aprender y protegerte mejor.</p>
+            </div>
+        </section>
+
+        <section class="what-is-phishing">
+            <div class="container">
+                <h2 data-i18n="whatIs.title">¿Qué es el Phishing?</h2>
+                <div class="content-box">
+                    <p data-i18n="whatIs.description">El phishing es un tipo de ciberataque en el que los atacantes envían correos electrónicos fraudulentos que parecen provenir de fuentes confiables. Su objetivo es robar información sensible como contraseñas, datos financieros o información corporativa.</p>
+                    <div class="stat-box">
+                        <span class="stat-number">90%</span>
+                        <span class="stat-label" data-i18n="whatIs.stat">de los ataques cibernéticos comienzan con un email de phishing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="red-flags">
+            <div class="container">
+                <h2 data-i18n="redFlags.title">5 Señales para Identificar un Email Sospechoso</h2>
+                <div class="flags-grid">
+                    <div class="flag-card">
+                        <div class="flag-icon">📧</div>
+                        <h3 data-i18n="redFlags.flag1.title">Remitente Sospechoso</h3>
+                        <p data-i18n="redFlags.flag1.description">Verifica cuidadosamente la dirección del remitente. Los atacantes suelen usar dominios que imitan a empresas conocidas.</p>
+                    </div>
+                    <div class="flag-card">
+                        <div class="flag-icon">🔗</div>
+                        <h3 data-i18n="redFlags.flag2.title">Enlaces Sospechosos</h3>
+                        <p data-i18n="redFlags.flag2.description">Pasa el ratón sobre los enlaces antes de hacer clic. Si la URL no coincide con el texto o parece extraña, no hagas clic.</p>
+                    </div>
+                    <div class="flag-card">
+                        <div class="flag-icon">⚠️</div>
+                        <h3 data-i18n="redFlags.flag3.title">Urgencia Inusual</h3>
+                        <p data-i18n="redFlags.flag3.description">Los correos de phishing suelen crear urgencia falsa: "Tu cuenta será bloqueada", "Acción inmediata requerida".</p>
+                    </div>
+                    <div class="flag-card">
+                        <div class="flag-icon">📎</div>
+                        <h3 data-i18n="redFlags.flag4.title">Archivos Adjuntos Inesperados</h3>
+                        <p data-i18n="redFlags.flag4.description">No abras archivos adjuntos de remitentes desconocidos. Incluso de conocidos, verifica antes de abrir.</p>
+                    </div>
+                    <div class="flag-card">
+                        <div class="flag-icon">✍️</div>
+                        <h3 data-i18n="redFlags.flag5.title">Errores de Ortografía</h3>
+                        <p data-i18n="redFlags.flag5.description">Los correos legítimos de empresas profesionales rara vez tienen errores gramaticales o tipográficos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="what-to-do">
+            <div class="container">
+                <h2 data-i18n="whatToDo.title">¿Qué Hacer si Recibes un Email Sospechoso?</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 data-i18n="whatToDo.step1.title">No hagas clic</h3>
+                            <p data-i18n="whatToDo.step1.description">No interactúes con enlaces ni archivos adjuntos del email.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 data-i18n="whatToDo.step2.title">Verifica el remitente</h3>
+                            <p data-i18n="whatToDo.step2.description">Comprueba directamente con la empresa o persona a través de otro canal.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 data-i18n="whatToDo.step3.title">Reporta a IT</h3>
+                            <p data-i18n="whatToDo.step3.description">Envía el correo sospechoso a tu departamento de TI o seguridad.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 data-i18n="whatToDo.step4.title">Elimina el correo</h3>
+                            <p data-i18n="whatToDo.step4.description">Elimina el email de tu bandeja de entrada después de reportarlo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="consequences">
+            <div class="container">
+                <h2 data-i18n="consequences.title">¿Por Qué Es Importante?</h2>
+                <div class="consequences-grid">
+                    <div class="consequence-card">
+                        <div class="consequence-icon">🔓</div>
+                        <h3 data-i18n="consequences.item1.title">Robo de Credenciales</h3>
+                        <p data-i18n="consequences.item1.description">Tu contraseña puede ser robada y usada para acceder a sistemas corporativos.</p>
+                    </div>
+                    <div class="consequence-card">
+                        <div class="consequence-icon">💰</div>
+                        <h3 data-i18n="consequences.item2.title">Pérdida Financiera</h3>
+                        <p data-i18n="consequences.item2.description">Los ataques pueden resultar en fraudes financieros directos o indirectos.</p>
+                    </div>
+                    <div class="consequence-card">
+                        <div class="consequence-icon">🏢</div>
+                        <h3 data-i18n="consequences.item3.title">Compromiso Corporativo</h3>
+                        <p data-i18n="consequences.item3.description">Tu empresa puede sufrir brechas de datos que afecten a clientes y empleados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tips">
+            <div class="container">
+                <h2 data-i18n="tips.title">Consejos de Seguridad</h2>
+                <ul class="tips-list">
+                    <li data-i18n="tips.tip1">✅ <strong>Usa contraseñas únicas</strong> para cada servicio y cámbialas regularmente.</li>
+                    <li data-i18n="tips.tip2">🔐 <strong>Activa la autenticación de dos factores</strong> (2FA) siempre que sea posible.</li>
+                    <li data-i18n="tips.tip3">📱 <strong>Mantén tu software actualizado</strong> para protegerte de vulnerabilidades.</li>
+                    <li data-i18n="tips.tip4">🔍 <strong>Desconfía de solicitudes</strong> de información sensible por email.</li>
+                    <li data-i18n="tips.tip5">📞 <strong>Verifica por teléfono</strong> cualquier solicitud urgente de dinero o datos.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="acknowledgment">
+            <div class="container">
+                <div class="ack-box">
+                    <h2 data-i18n="ack.title">¿Entendido?</h2>
+                    <p data-i18n="ack.description">Al hacer clic en el botón abajo, confirmas que has leído y comprendido esta formación de seguridad.</p>
+                    <button id="ack-btn" class="ack-button" data-i18n="ack.button">Entendido - Continuar</button>
+                    <p id="ack-message" class="ack-message" style="display: none;" data-i18n="ack.success">✅ Gracias por tu compromiso con la seguridad.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="footer.text">© 2025 Saraiba. Formación en Ciberseguridad.</p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
