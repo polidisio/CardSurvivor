@@ -268,53 +268,61 @@ struct SmallCardPreview: View {
     
     var body: some View {
         ZStack {
-            Image("CardFrame")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 80, height: 110)
+            if let imageName = card.imageName {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 70, height: 100)
+                    .clipped()
+            } else {
+                Image("CardFrame")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 70, height: 100)
+            }
             
-            VStack(spacing: 2) {
+            VStack(spacing: 1) {
                 HStack {
                     Image(systemName: iconForCardType(card.type))
-                        .font(.caption2)
+                        .font(.system(size: 10))
                         .foregroundColor(cardColor)
                     Spacer()
                     Text("\(card.cost)")
-                        .font(.caption2)
+                        .font(.system(size: 10))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 2)
+                        .frame(width: 16, height: 16)
                         .background(cardColor)
-                        .cornerRadius(4)
+                        .clipShape(Circle())
                 }
                 .padding(.horizontal, 6)
-                .padding(.top, 8)
+                .padding(.top, 6)
                 
                 Spacer()
                 
                 Text(card.name)
-                    .font(.system(size: 8))
-                    .fontWeight(.bold)
+                    .font(.system(size: 8, weight: .bold))
                     .foregroundColor(.white)
+                    .textCase(.uppercase)
                     .lineLimit(1)
-                    .padding(.horizontal, 4)
+                    .shadow(color: .black, radius: 2)
                 
                 Text("\(card.value)")
-                    .font(.title3)
-                    .fontWeight(.bold)
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundColor(cardColor)
+                    .shadow(color: .black, radius: 2)
                 
                 Text(card.description)
-                    .font(.system(size: 6))
-                    .foregroundColor(.gray)
+                    .font(.system(size: 5))
+                    .foregroundColor(.white)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 4)
-                    .padding(.bottom, 4)
+                    .shadow(color: .black, radius: 2)
             }
-            .frame(width: 70, height: 100)
+            .frame(width: 64, height: 94)
         }
+        .frame(width: 70, height: 100)
     }
     
     var cardColor: Color {
@@ -821,14 +829,82 @@ struct CardView: View {
     var canPlay: Bool = true
     
     var body: some View {
-        VStack(spacing: 4) {
-            HStack { Image(systemName: iconForCardType(card.type)).foregroundColor(cardColor).font(.caption); Spacer(); Text("\(card.cost)").font(.caption).fontWeight(.bold).foregroundColor(.white).padding(.horizontal, 6).padding(.vertical, 2).background(cardColor).cornerRadius(4) }
-            Text(card.name).font(.caption).fontWeight(.bold).foregroundColor(.white).lineLimit(1)
-            if card.value > 0 { Text("\(card.value)").font(.title).fontWeight(.bold).foregroundColor(cardColor) } else { Spacer().frame(height: 30) }
-            Text(card.description).font(.caption2).foregroundColor(.gray).lineLimit(2).multilineTextAlignment(.center)
-            if showPrice { Text("\(price)").font(.caption2).foregroundColor(Color(hex: "FFD60A")) }
+        ZStack {
+            // Imagen de fondo de la carta si existe
+            if let imageName = card.imageName {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 110, height: 150)
+                    .clipped()
+                    .cornerRadius(12)
+                
+                // Overlay para hacer legible el texto
+                VStack(spacing: 2) {
+                    HStack {
+                        Image(systemName: iconForCardType(card.type))
+                            .font(.caption)
+                            .foregroundColor(cardColor)
+                        Spacer()
+                        Text("\(card.cost)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(width: 20, height: 20)
+                            .background(cardColor)
+                            .clipShape(Circle())
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+                    
+                    Spacer()
+                    
+                    Text(card.name)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .textCase(.uppercase)
+                        .lineLimit(1)
+                        .shadow(color: .black, radius: 2)
+                    
+                    if card.value > 0 {
+                        Text("\(card.value)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(cardColor)
+                            .shadow(color: .black, radius: 2)
+                    } else {
+                        Spacer().frame(height: 25)
+                    }
+                    
+                    Text(card.description)
+                        .font(.system(size: 8))
+                        .foregroundColor(.white)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 6)
+                        .shadow(color: .black, radius: 2)
+                    
+                    if showPrice {
+                        Text("\(price)")
+                            .font(.caption2)
+                            .foregroundColor(Color(hex: "FFD60A"))
+                            .shadow(color: .black, radius: 2)
+                    }
+                }
+                .frame(width: 110, height: 150)
+            } else {
+                // Diseño original si no hay imagen
+                VStack(spacing: 4) {
+                    HStack { Image(systemName: iconForCardType(card.type)).foregroundColor(cardColor).font(.caption); Spacer(); Text("\(card.cost)").font(.caption).fontWeight(.bold).foregroundColor(.white).padding(.horizontal, 6).padding(.vertical, 2).background(cardColor).cornerRadius(4) }
+                    Text(card.name).font(.caption).fontWeight(.bold).foregroundColor(.white).lineLimit(1)
+                    if card.value > 0 { Text("\(card.value)").font(.title).fontWeight(.bold).foregroundColor(cardColor) } else { Spacer().frame(height: 30) }
+                    Text(card.description).font(.caption2).foregroundColor(.gray).lineLimit(2).multilineTextAlignment(.center)
+                    if showPrice { Text("\(price)").font(.caption2).foregroundColor(Color(hex: "FFD60A")) }
+                }
+                .padding(10).frame(width: 110, height: 150).background(isSelected ? cardColor.opacity(0.3) : cardBackground).cornerRadius(12)
+            }
         }
-        .padding(10).frame(width: 110, height: 150).background(isSelected ? cardColor.opacity(0.3) : cardBackground).cornerRadius(12)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(isSelected ? cardColor : cardColor.opacity(0.5), lineWidth: isSelected ? 3 : 2))
         .scaleEffect(isSelected ? 1.05 : 1.0).animation(.easeInOut(duration: 0.2), value: isSelected)
     }

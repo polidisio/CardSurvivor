@@ -28,6 +28,65 @@ struct Card: Identifiable, Codable, Equatable {
         case legendary
     }
     
+    var imageName: String? {
+        switch name {
+        // Warrior cards
+        case "Golpe": return "Strike_Warrior"
+        case "Corte": return "Slash_Warrior"
+        case "Combate": return "Brawl_Warrior"
+        case "Golpe Crítico": return "Critical_Hit_Warrior"
+        case "Estocada": return "Thrust_Warrior"
+        case "Espadazo": return "Sword_Slash_Warrior"
+        case "Frenesí": return "Frenzy_Warrior"
+        case "Torbellino": return "Whirlwind_Warrior"
+        case "Ejecutar": return "Execute_Warrior"
+        case "Refugio": return "Refuge_Warrior"
+        
+        // Mage cards
+        case "Proyectil": return "Orb_Mage"
+        case "Bola de Fuego": return "Fireball_Mage"
+        case "Escarcha": return "Frost_Mage"
+        case "Veneno" where type == .power: return "Poison_Mage"
+        
+        // Rogue cards
+        case "Puñalada": return "Dagger_Rogue"
+        case "Ataque Rápido": return "Quick_Attack_Rogue"
+        case "Quick Strike": return "Quick_Strike_Rogue"
+        case "Robo": return "Steal_Rogue"
+        case "Velocidad": return "Haste_Rogue"
+        case "Asesinato": return "Assassinate_Rogue"
+        
+        // Paladin cards
+        case "Escudo Sagrado": return "Holy_Shield_Paladin"
+        case "Gran Curación": return "Greater_Heal_Paladin"
+        case "Inmunidad" where type == .defense && rarity == .rare: return "Immunity_Paladin"
+        case "Regeneración" where rarity == .rare: return "Regeneration_Paladin"
+        case "Meditar" where rarity == .rare: return "Meditate_Paladin"
+        case "Muro": return "Wall_Paladin"
+        
+        // Common cards - by type and rarity
+        case "Escudo": return "Shield_Warrior"
+        case "Pared": return "Wall_Warrior"
+        case "Parry": return "Parry_Warrior"
+        case "Fortaleza": return "Fortress_All"
+        case "Inmunidad": return "Immunity_All"
+        case "Furia": return "Rage_All"
+        case "Regeneración": return "Regeneration_All"
+        case "Aura de Poder": return "Power_Aura_All"
+        case "Berserker": return "Berserker_All"
+        case "Veneno": return "Poison_All"
+        case "Curación": return "Heal_All"
+        case "Robar": return "Draw_All"
+        case "Inspiración": return "Inspiration_All"
+        case "Meditar": return "Meditate_All"
+        case "Apocalipsis": return "Apocalypse_All"
+        case "Dragón": return "Dragon_All"
+        case "Escudo Dorado": return "Golden_Shield_All"
+        
+        default: return nil
+        }
+    }
+    
     init(id: UUID = UUID(), name: String, nameEn: String, description: String, descriptionEn: String, type: CardType, cost: Int, value: Int, rarity: CardRarity) {
         self.id = id
         self.name = name
