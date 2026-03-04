@@ -577,8 +577,26 @@ struct ProfileView: View {
 struct GameView: View {
     @ObservedObject var game: GameModel
     
+    private var waveBackground: String {
+        let waveNum = game.wave
+        if game.state == .waveComplete || game.state == .phaseComplete {
+            return "wave_complete"
+        } else if game.state == .bossReward {
+            return "wave_victory"
+        } else {
+            return "wave_\(String(format: "%02d", waveNum))"
+        }
+    }
+    
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            Image(waveBackground)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+                .overlay(Color.black.opacity(0.4))
+            
+            VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading) { 
                     HStack(spacing: 8) { 
@@ -673,6 +691,7 @@ struct GameView: View {
                     }.padding(.horizontal) 
                 }
             }.frame(height: 150).background(Color(hex: "2C2C2E"))
+        }
         }
     }
     
