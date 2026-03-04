@@ -356,7 +356,7 @@ struct ClassSelectionView: View {
         GeometryReader { geometry in
             ZStack {
                 // Imagen de fondo
-                Image("CardBackground")
+                Image("bg_class_selection")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: geometry.size.width, height: geometry.size.height)
