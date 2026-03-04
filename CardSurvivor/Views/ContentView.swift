@@ -620,7 +620,7 @@ struct GameView: View {
                     HStack { Image(systemName: "dollarsign.circle.fill").foregroundColor(Color(hex: "FFD60A")); Text("\(game.player.gold)").foregroundColor(Color(hex: "FFD60A")) }; 
                     Text("Score: \(game.score)").foregroundColor(.white).font(.caption) 
                 }
-            }.padding().background(Color(hex: "2C2C2E"))
+            }.padding().background(Color.black.opacity(0.5))
             
             ZStack {
                 VStack {
