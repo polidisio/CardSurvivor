@@ -594,7 +594,7 @@ struct GameView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
-                .overlay(Color.black.opacity(0.4))
+                .overlay(Color.black.opacity(0.2))
             
             VStack(spacing: 0) {
             HStack {
