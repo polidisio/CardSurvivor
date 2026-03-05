@@ -594,6 +594,7 @@ struct GameView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
+                .clipped()
                 .overlay(Color.black.opacity(0.2))
             
             VStack(spacing: 0) {
